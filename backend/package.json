@@ -1,0 +1,24 @@
+{
+  "name": "backend",
+  "version": "1.0.0",
+  "description": "Rest api avec Nodejs and Mysql",
+  "main": "index.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/bd1s/WebApp-RCS.git"
+  },
+  "author": "ESsalihi Badiaa",
+  "license": "ISC",
+  "bugs": {
+    "url": "https://github.com/bd1s/WebApp-RCS/issues"
+  },
+  "homepage": "https://github.com/bd1s/WebApp-RCS#readme",
+  "dependencies": {
+    "express": "^4.19.2",
+    "mysql2": "^3.10.0",
+    "sequelize": "^6.37.3"
+  }
+}
