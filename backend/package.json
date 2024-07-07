@@ -17,8 +17,14 @@
   },
   "homepage": "https://github.com/bd1s/WebApp-RCS#readme",
   "dependencies": {
+    "bcrypt": "^5.1.1",
+    "bcryptjs": "^2.4.3",
+    "body-parser": "^1.20.2",
     "express": "^4.19.2",
-    "mysql2": "^3.10.0",
+    "jsonwebtoken": "^9.0.2",
+    "mysql": "^2.18.1",
+    "mysql2": "^3.10.2",
+    "nodemailer": "^6.9.14",
     "sequelize": "^6.37.3"
   }
 }
