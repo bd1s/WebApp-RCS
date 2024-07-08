@@ -1,6 +1,6 @@
 // src/App.jsx
 import React from "react";
-import { BrowserRouter as Router, Routes, Route} from "react-router-dom";
+import { BrowserRouter as Router, Routes, Route } from "react-router-dom";
 import "bootstrap/dist/css/bootstrap.min.css";
 import "./App.css";
 import Home from "./components/Home";
@@ -34,13 +34,17 @@ const App = () => {
             </li>
           </div>
         </nav> */}
-        <div className="container mt-3">
+        <div className="container h-screen">
           <Routes>
             <Route path="/" element={<Home />} />
             <Route path="/login" element={<Login />} />
             <Route path="/register" element={<Register />} />
-            <Route path="/confirm/:activationcode" element={<ActivationPage />} />
-            <Route path="/reset-password" element={<ResetPassword />} /> {/* Ajoutez cette ligne */}
+            <Route
+              path="/confirm/:activationcode"
+              element={<ActivationPage />}
+            />
+            <Route path="/reset-password" element={<ResetPassword />} />{" "}
+            {/* Ajoutez cette ligne */}
           </Routes>
         </div>
       </div>
