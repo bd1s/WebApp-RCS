@@ -13,9 +13,17 @@ const authController = require('../controllers/authController');
 
 // Register user
 router.post('/register', authController.register);
+
 // Login user
 router.post('/login', authController.login);
+
 // Get all users
 router.get('/users', authController.getAllUsers);
+
+// Password reset request
+router.post('/reset-password', authController.requestPasswordReset);
+
+router.post('/verifyuser/:activationcode', authController.verifyUser);
+
 
 module.exports = router;
