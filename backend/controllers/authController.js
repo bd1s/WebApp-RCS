@@ -6,7 +6,8 @@ const bcrypt = require('bcrypt');
 const jwt = require('jsonwebtoken');
 const crypto = require('crypto'); // Pour générer le token de réinitialisation
 require('dotenv').config();
-const { sendConfirmationEmail } = require('../nodemailer'); // Assurez-vous que ce chemin est correct
+const { Op } = require('sequelize');
+const { sendConfirmationEmail, sendPasswordResetEmail } = require('../nodemailer'); // Assurez-vous que ce chemin est correct
 
 
 
@@ -90,35 +91,6 @@ const register = async (req, res) => {
 
 
 
-
-const requestPasswordReset = async (req, res) => {
-  const { email } = req.body;
-
-  try {
-    // Vérifiez si l'utilisateur existe avec l'email donné
-    const user = await Utilisateur.findOne({ where: { email } });
-    if (!user) {
-      return res.status(404).json({ msg: 'Aucun utilisateur trouvé avec cet email' });
-    }
-
-    // Générez un token de réinitialisation de mot de passe
-    const resetToken = crypto.randomBytes(20).toString('hex');
-
-    // Stockez le token et l'heure d'expiration dans la base de données pour cet utilisateur
-    user.resetPasswordToken = resetToken;
-    user.resetPasswordExpires = Date.now() + 3600000; // 1 heure d'expiration
-
-    await user.save();
-
-    // Envoyez un email à l'utilisateur avec le lien de réinitialisation du mot de passe (implémentation dépendante de votre service d'email)
-
-    res.status(200).json({ msg: 'Un email avec les instructions de réinitialisation de mot de passe a été envoyé' });
-  } catch (err) {
-    console.error('Erreur lors de la demande de réinitialisation de mot de passe :', err);
-    res.status(500).json({ msg: 'Erreur du serveur', error: err.message });
-  }
-};
-
 const login = async (req, res) => {
   try {
     const { email, password } = req.body;
@@ -167,28 +139,6 @@ const login = async (req, res) => {
   }
 };
 
-// const verifyUser = async (req, res) => {
-//   try {
-//     const user = await Utilisateur.findOne({ where: { activationCode: req.params.activationcode } });
-//     if (!user) {
-//       return res.status(400).send({
-//         message: "Code d'activation incorrect",
-//       });
-//     }
-
-//     user.isActive = true;
-//     await user.save();
-
-//     res.send({
-//       message: "Le compte a été activé avec succès",
-//     });
-//   } catch (err) {
-//     res.status(500).send({
-//       message: "Erreur du serveur",
-//       error: err.message,
-//     });
-//   }
-// };
 const verifyUser = async (req, res) => {
   try {
     const user = await Utilisateur.findOne({ where: { activationCode: req.params.activationcode } });
@@ -198,11 +148,11 @@ const verifyUser = async (req, res) => {
       });
     }
 
-    user.isActive = true; // Sequelize devrait gérer la conversion en 1 pour la base de données
+    user.isActive = true;
     await user.save();
 
     res.send({
-      message: "Félicitations ! Votre compte a été activé avec succès.",
+      message: "Le compte a été activé avec succès",
     });
   } catch (err) {
     res.status(500).send({
@@ -211,6 +161,31 @@ const verifyUser = async (req, res) => {
     });
   }
 };
+
+
+
+// const verifyUser = async (req, res) => {
+//   try {
+//     const user = await Utilisateur.findOne({ where: { activationCode: req.params.activationcode } });
+//     if (!user) {
+//       return res.status(400).send({
+//         message: "Code d'activation incorrect",
+//       });
+//     }
+
+//     user.isActive = true; // Sequelize devrait gérer la conversion en 1 pour la base de données
+//     await user.save();
+
+//     res.send({
+//       message: "Félicitations ! Votre compte a été activé avec succès.",
+//     });
+//   } catch (err) {
+//     res.status(500).send({
+//       message: "Erreur du serveur",
+//       error: err.message,
+//     });
+//   }
+// };
 
 
 const getAllUsers = async (req, res) => {
@@ -223,10 +198,112 @@ const getAllUsers = async (req, res) => {
   }
 };
 
+
+
+// Fonction pour demander la réinitialisation du mot de passe
+const requestPasswordReset = async (req, res) => {
+  const { email } = req.body;
+
+  try {
+    // Vérifiez si l'utilisateur existe avec l'email donné
+    const user = await Utilisateur.findOne({ where: { email } });
+    if (!user) {
+      return res.status(404).json({ msg: 'Aucun utilisateur trouvé avec cet email' });
+    }
+
+    // Générez un token de réinitialisation de mot de passe
+    const resetToken = crypto.randomBytes(20).toString('hex');
+
+    // Stockez le token et l'heure d'expiration dans la base de données pour cet utilisateur
+    user.resetPasswordToken = resetToken;
+    user.resetPasswordExpires = Date.now() + 3600000; // 1 heure d'expiration
+
+    await user.save();
+
+    // Envoyez un email à l'utilisateur avec le lien de réinitialisation du mot de passe
+    sendPasswordResetEmail(email, resetToken);
+
+    res.status(200).json({ msg: 'Un email avec les instructions de réinitialisation de mot de passe a été envoyé' });
+  } catch (err) {
+    console.error('Erreur lors de la demande de réinitialisation de mot de passe :', err);
+    res.status(500).json({ msg: 'Erreur du serveur', error: err.message });
+  }
+};
+
+// const resetPassword = async (req, res) => {
+//   const { token, password } = req.body;
+
+//   try {
+//     // Trouvez l'utilisateur avec le token donné et assurez-vous que le token n'a pas expiré
+//     const user = await Utilisateur.findOne({
+//       where: {
+//         resetPasswordToken: token,
+//         resetPasswordExpires: { [Op.gt]: Date.now() }, // Vérifiez si le token n'a pas expiré
+//       },
+//     });
+
+//     if (!user) {
+//       return res.status(400).json({ msg: 'Le token de réinitialisation est invalide ou a expiré' });
+//     }
+
+//     // Hash le nouveau mot de passe
+//     const hashedPassword = await bcrypt.hash(password, 10);
+
+//     // Mettre à jour l'utilisateur avec le nouveau mot de passe et réinitialiser les champs de token
+//     user.mot_de_passe_hache = hashedPassword;
+//     user.resetPasswordToken = null;
+//     user.resetPasswordExpires = null;
+
+//     await user.save();
+
+//     res.status(200).json({ msg: 'Votre mot de passe a été réinitialisé avec succès' });
+//   } catch (err) {
+//     console.error('Erreur lors de la réinitialisation du mot de passe :', err);
+//     res.status(500).json({ msg: 'Erreur du serveur', error: err.message });
+//   }
+// };
+
+const resetPassword = async (req, res) => {
+  const { token, password } = req.body;
+  console.log("Token reçu:", token);
+  console.log("Password reçu:", password);
+
+  try {
+    const user = await Utilisateur.findOne({
+      where: {
+        resetPasswordToken: token,
+        resetPasswordExpires: { [Op.gt]: Date.now() },
+      },
+    });
+
+    if (!user) {
+      console.log("Token invalide ou expiré");
+      return res.status(400).json({ msg: 'Le token de réinitialisation est invalide ou a expiré' });
+    }
+
+    const hashedPassword = await bcrypt.hash(password, 10);
+    console.log("Mot de passe hashé:", hashedPassword);
+
+    user.mot_de_passe_hache = hashedPassword;
+    user.resetPasswordToken = null;
+    user.resetPasswordExpires = null;
+
+    await user.save();
+
+    console.log("Mot de passe réinitialisé avec succès");
+    res.status(200).json({ msg: 'Votre mot de passe a été réinitialisé avec succès' });
+  } catch (err) {
+    console.error('Erreur lors de la réinitialisation du mot de passe :', err);
+    res.status(500).json({ msg: 'Erreur du serveur', error: err.message });
+  }
+};
+
 module.exports = {
   register,
   login,
   getAllUsers,
-  requestPasswordReset, 
-  verifyUser
+  requestPasswordReset,
+  verifyUser,
+  resetPassword 
 };
+
