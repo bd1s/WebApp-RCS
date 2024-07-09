@@ -1,6 +1,5 @@
 // src/components/Login.jsx
 import React from "react";
-import { Link } from "react-router-dom";
 import fac_logo from "../../assets/fac_logo.png";
 import uni_logo from "../../assets/uni_logo.png";
 

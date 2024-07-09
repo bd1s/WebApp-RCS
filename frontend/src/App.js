@@ -12,7 +12,7 @@ import ResetPassword from "./components/ResetPassword"; // Importez le composant
 const App = () => {
   return (
     <Router>
-      <div>
+      <div className="flex flex-col items-center h-screen m-0">
         {/* <nav className="navbar navbar-expand navbar-dark bg-dark">
           <div className="navbar-nav mr-auto">
             <li className="nav-item">
@@ -34,19 +34,14 @@ const App = () => {
             </li>
           </div>
         </nav> */}
-        <div className="container h-screen">
-          <Routes>
-            <Route path="/" element={<Home />} />
-            <Route path="/login" element={<Login />} />
-            <Route path="/register" element={<Register />} />
-            <Route
-              path="/confirm/:activationcode"
-              element={<ActivationPage />}
-            />
-            <Route path="/reset-password" element={<ResetPassword />} />{" "}
-            {/* Ajoutez cette ligne */}
-          </Routes>
-        </div>
+        <Routes>
+          <Route path="/" element={<Home />} />
+          <Route path="/login" element={<Login />} />
+          <Route path="/register" element={<Register />} />
+          <Route path="/confirm/:activationcode" element={<ActivationPage />} />
+          <Route path="/reset-password" element={<ResetPassword />} />{" "}
+          {/* Ajoutez cette ligne */}
+        </Routes>
       </div>
     </Router>
   );

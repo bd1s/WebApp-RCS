@@ -5,7 +5,7 @@ import Header from "./atoms/header";
 
 const Login = () => {
   return (
-    <div className="flex flex-col pt-4 h-full">
+    <div className="flex flex-col pt-4 h-full w-9/12">
       <Header />
       <div className="flex flex-col items-center bg-[#9CD8ED] w-fit p-24 self-center justify-self-center rounded-3xl gap-4">
         <h2 className="text-6xl">Connexion</h2>
