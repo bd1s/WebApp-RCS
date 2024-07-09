@@ -6,7 +6,7 @@ import silerimage from "../assets/sliderimage5.jpg";
 
 const Home = () => {
   return (
-    <div className="h-full flex flex-col justify-between">
+    <div className="h-full flex flex-col justify-between w-9/12">
       <div className="flex flex-row justify-between items-center pt-52">
         <div className="flex flex-col gap-12">
           <img src={logo} alt="logo" className="w-36 h-36" />

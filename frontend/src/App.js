@@ -70,17 +70,36 @@ import ResetPassword from "./components/ResetPassword"; // Composant pour réini
 const App = () => {
   return (
     <Router>
-      <div>
-        <div className="container h-screen">
-          <Routes>
-            <Route path="/" element={<Home />} />
-            <Route path="/login" element={<Login />} />
-            <Route path="/register" element={<Register />} />
-            <Route path="/confirm/:activationcode" element={<ActivationPage />} />
-            <Route path="/reset-password" element={<ResetPasswordRequest />} />
-            <Route path="/reset-password/:token" element={<ResetPassword />} />
-          </Routes>
-        </div>
+      <div className="flex flex-col items-center h-screen m-0">
+        {/* <nav className="navbar navbar-expand navbar-dark bg-dark">
+          <div className="navbar-nav mr-auto">
+            <li className="nav-item">
+              <Link to={"/"} className="nav-link">
+                Home
+              </Link>
+            </li>
+          </div>
+          <div className="navbar-nav ml-auto">
+            <li className="nav-item">
+              <Link to={"/login"} className="nav-link">
+                Login
+              </Link>
+            </li>
+            <li className="nav-item">
+              <Link to={"/register"} className="nav-link">
+                Sign Up
+              </Link>
+            </li>
+          </div>
+        </nav> */}
+        <Routes>
+          <Route path="/" element={<Home />} />
+          <Route path="/login" element={<Login />} />
+          <Route path="/register" element={<Register />} />
+          <Route path="/confirm/:activationcode" element={<ActivationPage />} />
+          <Route path="/reset-password" element={<ResetPassword />} />{" "}
+          {/* Ajoutez cette ligne */}
+        </Routes>
       </div>
     </Router>
   );
