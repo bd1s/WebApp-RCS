@@ -7,9 +7,10 @@ const jwt = require('jsonwebtoken');
 const crypto = require('crypto'); // Pour générer le token de réinitialisation
 require('dotenv').config();
 const { Op } = require('sequelize');
-const { sendConfirmationEmail, sendPasswordResetEmail } = require('../nodemailer'); // Assurez-vous que ce chemin est correct
+const { sendConfirmationEmail, sendPasswordResetEmail } = require('../nodemailer'); 
 
 
+const sequelize = require('../config/database'); // Assurez-vous que le chemin vers votre fichier de configuration Sequelize est correct
 
 
 // const register = async (req, res) => {
@@ -139,28 +140,73 @@ const login = async (req, res) => {
   }
 };
 
+
+
+
 const verifyUser = async (req, res) => {
   try {
+    console.log("Requête reçue pour activer l'utilisateur avec le code :", req.params.activationcode);
     const user = await Utilisateur.findOne({ where: { activationCode: req.params.activationcode } });
     if (!user) {
+      console.log("Code d'activation incorrect");
       return res.status(400).send({
         message: "Code d'activation incorrect",
       });
     }
 
-    user.isActive = true;
+    console.log("Utilisateur trouvé :", user);
+    user.isActive = true; // Sequelize devrait gérer la conversion en 1 pour la base de données
     await user.save();
+    console.log("Utilisateur mis à jour :", user);
 
     res.send({
-      message: "Le compte a été activé avec succès",
+      message: "Félicitations ! Votre compte a été activé avec succès.",
     });
   } catch (err) {
+    console.error("Erreur du serveur :", err.message);
     res.status(500).send({
       message: "Erreur du serveur",
       error: err.message,
     });
   }
 };
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+// const verifyUser = async (req, res) => {
+//   try {
+//     const user = await Utilisateur.findOne({ where: { activationCode: req.params.activationcode } });
+//     if (!user) {
+//       return res.status(400).send({
+//         message: "Code d'activation incorrect",
+//       });
+//     }
+
+//     user.isActive = true;
+//     await user.save();
+
+//     res.send({
+//       message: "Le compte a été activé avec succès",
+//     });
+//   } catch (err) {
+//     res.status(500).send({
+//       message: "Erreur du serveur",
+//       error: err.message,
+//     });
+//   }
+// };
 
 
 
@@ -263,8 +309,11 @@ const requestPasswordReset = async (req, res) => {
 //   }
 // };
 
-const resetPassword = async (req, res) => {
-  const { token, password } = req.body;
+ // Assurez-vous du chemin correct
+
+ const resetPassword = async (req, res) => {
+  const { token } = req.params;
+  const { password } = req.body;
   console.log("Token reçu:", token);
   console.log("Password reçu:", password);
 
@@ -272,7 +321,9 @@ const resetPassword = async (req, res) => {
     const user = await Utilisateur.findOne({
       where: {
         resetPasswordToken: token,
-        resetPasswordExpires: { [Op.gt]: Date.now() },
+        resetPasswordExpires: {
+          [Op.gt]: sequelize.literal('CURRENT_TIMESTAMP')
+        },
       },
     });
 
@@ -291,12 +342,14 @@ const resetPassword = async (req, res) => {
     await user.save();
 
     console.log("Mot de passe réinitialisé avec succès");
-    res.status(200).json({ msg: 'Votre mot de passe a été réinitialisé avec succès' });
+    return res.status(200).json({ msg: 'Votre mot de passe a été réinitialisé avec succès' });
   } catch (err) {
     console.error('Erreur lors de la réinitialisation du mot de passe :', err);
-    res.status(500).json({ msg: 'Erreur du serveur', error: err.message });
+    return res.status(500).json({ msg: 'Erreur du serveur', error: err.message });
   }
 };
+
+
 
 module.exports = {
   register,

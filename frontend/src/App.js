@@ -64,8 +64,11 @@ import Home from "./components/Home";
 import Login from "./components/Login";
 import Register from "./components/Register";
 import ActivationPage from "./components/ActivationPage";
-import ResetPasswordRequest from "./components/ResetPasswordRequest"; // Composant pour demander la réinitialisation de mot de passe
-import ResetPassword from "./components/ResetPassword"; // Composant pour réinitialiser le mot de passe
+ // Composant pour demander la réinitialisation de mot de passe
+import ResetPassword from "./components/ResetPassword";
+import DoctorDashboard from "./components/DoctorDashboard";
+import ResetPasswordRequest from "./components/ResetPasswordRequest";
+ // Composant pour réinitialiser le mot de passe
 
 const App = () => {
   return (
@@ -97,7 +100,9 @@ const App = () => {
           <Route path="/login" element={<Login />} />
           <Route path="/register" element={<Register />} />
           <Route path="/confirm/:activationcode" element={<ActivationPage />} />
-          <Route path="/reset-password" element={<ResetPassword />} />{" "}
+          <Route path="/doctorDashboard" element={<DoctorDashboard />} />
+          <Route path="/reset-password" element={<ResetPasswordRequest />} />
+          <Route path="/reset-password/:token" element={<ResetPassword />} />
           {/* Ajoutez cette ligne */}
         </Routes>
       </div>

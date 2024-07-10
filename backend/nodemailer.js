@@ -65,7 +65,7 @@ module.exports.sendConfirmationEmail = (email, activationCode) => {
 };
 
 // Function to send password reset email
-module.exports.sendPasswordResetEmail = (email, resetToken) => {
+module.exports.sendPasswordResetEmail = (email, token) => {
   transporter.sendMail({
     from: process.env.EMAIL_FROM,
     to: email,
@@ -74,7 +74,7 @@ module.exports.sendPasswordResetEmail = (email, resetToken) => {
       <h1>Réinitialisation de votre mot de passe</h1>
       <h2>Bonjour</h2>
       <p>Pour réinitialiser votre mot de passe, veuillez cliquer sur ce lien</p>
-      <a href="http://localhost:3000/reset-password/${resetToken}">Réinitialiser mon mot de passe</a>
+      <a href="http://localhost:3000/reset-password/${token }">Réinitialiser mon mot de passe</a>
     `,
   })
   .then(() => console.log('Email de réinitialisation de mot de passe envoyé avec succès'))

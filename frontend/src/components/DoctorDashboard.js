@@ -7,7 +7,7 @@ import Request from "../assets/requests";
 import Calendar from "../assets/calendar";
 import Logout from "../assets/logout";
 
-const Login = () => {
+const DoctorDashboard = () => {
   return (
     <div className="flex flex-row h-full w-full">
       <div className="bg-[#9CD8ED] flex flex-col justify-between w-2/12 items-center p-4">
@@ -43,4 +43,4 @@ const Login = () => {
   );
 };
 
-export default Login;
+export default DoctorDashboard;
