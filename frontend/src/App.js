@@ -73,6 +73,7 @@ import DoctoralCycleInfoForm from "./components/DoctoralCycleInfoForm";
 import BaccalaureateInfoForm from "./components/BaccalaureateInfoForm";
 import UniversityInfoForm from "./components/UniversityInfoForm";
 import PersonalInfoForm from "./components/PersonalInfoForm";
+import DoctorantInfo from "./components/DoctorantInfo";
  // Composant pour réinitialiser le mot de passe
 
 const App = () => {
@@ -109,10 +110,13 @@ const App = () => {
           <Route path="/reset-password" element={<ResetPasswordRequest />} />
           <Route path="/reset-password/:token" element={<ResetPassword />} />
           <Route path="/DoctorantInfoForm" element={<DoctorantInfoForm />} />
+          <Route path="/DoctorantInfo" element={<DoctorantInfo />} />
+
           <Route path="/DoctoralCycleInfoForm" element={<DoctoralCycleInfoForm />} />
           <Route path="/DoctoralCycleInfoForm" element={<BaccalaureateInfoForm />} />
           <Route path="/DoctoralCycleInfoForm" element={<UniversityInfoForm />} />
           <Route path="/DoctoralCycleInfoForm" element={<PersonalInfoForm />} />
+
 
 
 

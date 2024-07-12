@@ -123,9 +123,10 @@
 
 // src/components/Login.jsx
 import React, { useState } from "react";
-import axios from 'axios';
 import { Link, useNavigate } from "react-router-dom";
 import Header from "./atoms/header";
+import axios from '../api/axios';
+
 
 const Login = () => {
   const [formData, setFormData] = useState({
@@ -142,9 +143,9 @@ const Login = () => {
   const handleSubmit = async (e) => {
     e.preventDefault();
     try {
-      const response = await axios.post('http://localhost:3001/api/auth/login', formData);
-      console.log(response.data);
-      // Handle success, e.g., store token in localStorage and redirect
+      const response = await axios.post('/auth/login', formData);
+      const token = response.data.token;
+      localStorage.setItem('token', token); // Stocker le jeton JWT
       navigate('/doctorDashboard'); // Redirection après succès de la connexion
     } catch (error) {
       console.error('Login error:', error.response.data);

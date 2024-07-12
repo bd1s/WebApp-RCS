@@ -182,9 +182,9 @@
 
 // src/components/Register.jsx
 import React, { useState } from 'react';
-import axios from 'axios';
 import { useNavigate } from 'react-router-dom';
 import Header from "./atoms/header";
+import axios from '../api/axios';
 
 const Register = () => {
   const [formData, setFormData] = useState({
@@ -205,7 +205,7 @@ const Register = () => {
   const handleSubmit = async (e) => {
     e.preventDefault();
     try {
-      const response = await axios.post('http://localhost:3001/api/auth/register', formData);
+      const response = await axios.post('/auth/register', formData);
       console.log(response.data);
       // Handle success, e.g., show a success message or redirect to login
       navigate('/login'); // Redirection après succès de l'inscription

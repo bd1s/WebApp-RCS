@@ -57,6 +57,7 @@ import Case from "../assets/case";
 import Request from "../assets/requests";
 import Calendar from "../assets/calendar";
 import Logout from "../assets/logout";
+import DoctorantInfo from "./DoctorantInfo";
 
 const DoctorDashboard = () => {
   return (
@@ -68,7 +69,7 @@ const DoctorDashboard = () => {
             <Notif fillColor="white" width={32} height={32} />
             <p>Notifications</p>
           </Link>
-          <Link to="/DoctorantInfoForm" className="flex flex-row gap-1 text-lg items-center text-white">
+          <Link to="/DoctorantInfo" className="flex flex-row gap-1 text-lg items-center text-white">
             <Case fillColor="white" width={32} height={32} />
             <p>Doctorant</p>
           </Link>
@@ -94,7 +95,7 @@ const DoctorDashboard = () => {
       {/* Section principale du tableau de bord */}
       <div className="flex-grow p-4">
         <h1 className="text-2xl mb-4">Tableau de Bord Doctorant</h1>
-        {/* Le contenu du formulaire DoctorantInfoForm sera rendu ici en fonction de la route */}
+        <DoctorantInfo/>
       </div>
     </div>
   );

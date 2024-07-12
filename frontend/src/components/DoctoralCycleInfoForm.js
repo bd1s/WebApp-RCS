@@ -1,7 +1,7 @@
 // src/components/DoctoralCycleInfoForm.js
 
 import React, { useState } from 'react';
-import axios from 'axios';
+import axios from '../api/axios';
 
 const DoctoralCycleInfoForm = () => {
   const [formData, setFormData] = useState({
@@ -24,7 +24,7 @@ const DoctoralCycleInfoForm = () => {
   const handleSubmit = async (e) => {
     e.preventDefault();
     try {
-      const response = await axios.post('http://localhost:3001/api/doctorant/personal-info', formData);
+      const response = await axios.post('/doctorant/doctorant-info', formData);
       console.log(response.data); // Afficher la réponse du backend
       // Réinitialiser le formulaire ou afficher une confirmation
     } catch (error) {
