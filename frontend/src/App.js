@@ -68,6 +68,11 @@ import ActivationPage from "./components/ActivationPage";
 import ResetPassword from "./components/ResetPassword";
 import DoctorDashboard from "./components/DoctorDashboard";
 import ResetPasswordRequest from "./components/ResetPasswordRequest";
+import DoctorantInfoForm from "./components/DoctorantInfoForm";
+import DoctoralCycleInfoForm from "./components/DoctoralCycleInfoForm";
+import BaccalaureateInfoForm from "./components/BaccalaureateInfoForm";
+import UniversityInfoForm from "./components/UniversityInfoForm";
+import PersonalInfoForm from "./components/PersonalInfoForm";
  // Composant pour réinitialiser le mot de passe
 
 const App = () => {
@@ -103,6 +108,18 @@ const App = () => {
           <Route path="/doctorDashboard" element={<DoctorDashboard />} />
           <Route path="/reset-password" element={<ResetPasswordRequest />} />
           <Route path="/reset-password/:token" element={<ResetPassword />} />
+          <Route path="/DoctorantInfoForm" element={<DoctorantInfoForm />} />
+          <Route path="/DoctoralCycleInfoForm" element={<DoctoralCycleInfoForm />} />
+          <Route path="/DoctoralCycleInfoForm" element={<BaccalaureateInfoForm />} />
+          <Route path="/DoctoralCycleInfoForm" element={<UniversityInfoForm />} />
+          <Route path="/DoctoralCycleInfoForm" element={<PersonalInfoForm />} />
+
+
+
+
+
+
+
           {/* Ajoutez cette ligne */}
         </Routes>
       </div>

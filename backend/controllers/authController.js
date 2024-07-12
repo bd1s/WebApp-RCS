@@ -1,13 +1,15 @@
 
 
+const { Utilisateur, Doctorant } = require('../models');
 
-const Utilisateur = require('../models/utilisateur');
+// const Utilisateur = require('../models/utilisateur');
 const bcrypt = require('bcrypt');
 const jwt = require('jsonwebtoken');
 const crypto = require('crypto'); // Pour générer le token de réinitialisation
 require('dotenv').config();
 const { Op } = require('sequelize');
 const { sendConfirmationEmail, sendPasswordResetEmail } = require('../nodemailer'); 
+// const { Doctorant } = require('../models/doctorant'); // Importez les modèles associés
 
 
 const sequelize = require('../config/database'); // Assurez-vous que le chemin vers votre fichier de configuration Sequelize est correct
@@ -45,6 +47,7 @@ const sequelize = require('../config/database'); // Assurez-vous que le chemin v
 //   }
 // };
 
+
 const register = async (req, res) => {
   try {
     const { email, password, role, prenom, nom, tele } = req.body;
@@ -80,10 +83,37 @@ const register = async (req, res) => {
       activationCode,
     });
 
-   // Send confirmation email
-   sendConfirmationEmail(email, activationCode);
+    let newProfile;
 
-    res.status(201).json({ msg: 'Utilisateur enregistré avec succès', user: newUser });
+    switch (role) {
+      case 'Doctorant':
+        newProfile = await Doctorant.create({
+          id_utilisateur: newUser.id_utilisateur,
+          // Ajoutez d'autres champs spécifiques au doctorant si nécessaire
+        });
+        break;
+      case 'Admin':
+        // Commenté pour le moment car le modèle Admin n'est pas encore créé
+        // newProfile = await Admin.create({
+        //   id_utilisateur: newUser.id_utilisateur,
+        //   // Ajoutez d'autres champs spécifiques à l'admin si nécessaire
+        // });
+        break;
+      case 'Enseignant':
+        // Commenté pour le moment car le modèle Enseignant n'est pas encore créé
+        // newProfile = await Enseignant.create({
+        //   id_utilisateur: newUser.id_utilisateur,
+        //   // Ajoutez d'autres champs spécifiques à l'enseignant si nécessaire
+        // });
+        break;
+      default:
+        throw new Error('Rôle non pris en charge');
+    }
+
+    // Send confirmation email
+    sendConfirmationEmail(email, activationCode);
+
+    res.status(201).json({ msg: 'Utilisateur enregistré avec succès', user: newUser, profile: newProfile });
   } catch (err) {
     console.error('Erreur lors de l\'enregistrement de l\'utilisateur :', err);
     res.status(500).json({ msg: 'Erreur du serveur', error: err.message });
@@ -91,6 +121,53 @@ const register = async (req, res) => {
 };
 
 
+
+
+
+// const register = async (req, res) => {
+//   try {
+//     const { email, password, role, prenom, nom, tele } = req.body;
+
+//     // Validate password length
+//     if (password.length < 8) {
+//       return res.status(400).json({ msg: 'Le mot de passe doit comporter au moins 8 caractères' });
+//     }
+
+//     // Hash the password before storing it in the database
+//     const hashedPassword = await bcrypt.hash(password, 10);
+
+//     // Generate activation code
+//     const characters = "0123456789abcdefghijklmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZ";
+//     let activationCode = "";
+//     for (let i = 0; i < 25; i++) {
+//       activationCode += characters[Math.floor(Math.random() * characters.length)];
+//     }
+
+//     // Debugging: log the hashed password and activation code
+//     console.log('Hashed password (registration):', hashedPassword);
+//     console.log('Activation code:', activationCode);
+
+//     // Create new user
+//     const newUser = await Utilisateur.create({
+//       email,
+//       mot_de_passe_hache: hashedPassword,
+//       role,
+//       prenom,
+//       nom,
+//       tele,
+//       isActive: false,
+//       activationCode,
+//     });
+
+//    // Send confirmation email
+//    sendConfirmationEmail(email, activationCode);
+
+//     res.status(201).json({ msg: 'Utilisateur enregistré avec succès', user: newUser });
+//   } catch (err) {
+//     console.error('Erreur lors de l\'enregistrement de l\'utilisateur :', err);
+//     res.status(500).json({ msg: 'Erreur du serveur', error: err.message });
+//   }
+// };
 
 const login = async (req, res) => {
   try {

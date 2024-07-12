@@ -1,15 +1,10 @@
-// const express = require('express');
-// const router = express.Router();
-// const doctorantController = require('../controllers/doctorantController');
-// const authMiddleware = require('../middlewares/authMiddleware');
+const express = require('express');
+const router = express.Router();
+const personalInfoController = require('../controllers/personalInfoController');
+const verifyToken = require('../middleware/verifyToken'); // Importez le middleware
 
+// Route pour récupérer toutes les informations d'un doctorant
+router.get('/doctorant-info', verifyToken, personalInfoController.getPersonalInfo);
+router.post('/doctorant-info', verifyToken, personalInfoController.createOrUpdatePersonalInfo);
 
-
-// router.get('/profile', doctorantController.getProfile);
-// router.put('/profile', doctorantController.updateProfile);
-// router.post('/request-change', doctorantController.requestChange);
-// router.post('/request-attestation', doctorantController.requestAttestation);
-// router.get('/calendar', doctorantController.getCalendar);
-// router.post('/upload-request', doctorantController.uploadRequest);
-
-// module.exports = router;
+module.exports = router;
