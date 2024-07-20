@@ -21,6 +21,8 @@ module.exports = (sequelize, DataTypes) => {
     Doctorant.hasMany(models.InfosBaccalaureats, { foreignKey: 'id_doctorant' });
     Doctorant.hasMany(models.InfosUniversitaires, { foreignKey: 'id_doctorant' });
     Doctorant.hasMany(models.InfosCycleDoctorals, { foreignKey: 'id_doctorant' });
+    Doctorant.hasMany(models.Demande, { foreignKey: 'id_doctorant' }); // Ajout de l'association avec Demande
+
   };
 
   return Doctorant;

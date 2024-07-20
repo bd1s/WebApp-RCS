@@ -73,7 +73,7 @@ const DoctorDashboard = () => {
             <Case fillColor="white" width={32} height={32} />
             <p>Doctorant</p>
           </Link>
-          <Link to="/dashboard" className="flex flex-row gap-1 text-lg items-center text-white">
+          <Link to="/DemandeForm" className="flex flex-row gap-1 text-lg items-center text-white">
             <Request fillColor="white" width={32} height={32} />
             <p>Requests</p>
           </Link>

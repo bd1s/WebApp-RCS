@@ -632,7 +632,6 @@
 
 import React, { useState, useEffect } from 'react';
 import axios from '../api/axios'; // Utiliser l'instance Axios configurée
-
 const DoctorantInfoForm = () => {
   const [formData, setFormData] = useState({
     // Informations Personnelles

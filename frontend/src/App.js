@@ -74,6 +74,9 @@ import BaccalaureateInfoForm from "./components/BaccalaureateInfoForm";
 import UniversityInfoForm from "./components/UniversityInfoForm";
 import PersonalInfoForm from "./components/PersonalInfoForm";
 import DoctorantInfo from "./components/DoctorantInfo";
+import DemandeForm from "./components/DemandeForm";
+import InscriptionForm from "./components/InscriptionForm";
+import DemandeRetraitProvisoireForm from "./components/DemandeRetraitProvisoireForm";
  // Composant pour réinitialiser le mot de passe
 
 const App = () => {
@@ -116,6 +119,10 @@ const App = () => {
           <Route path="/DoctoralCycleInfoForm" element={<BaccalaureateInfoForm />} />
           <Route path="/DoctoralCycleInfoForm" element={<UniversityInfoForm />} />
           <Route path="/DoctoralCycleInfoForm" element={<PersonalInfoForm />} />
+          <Route path="/DemandeForm" element={<DemandeForm />} />
+          <Route path="/DemandeRetraitProvisoireForm" element={<DemandeRetraitProvisoireForm />} />
+
+          <Route path="/InscriptionForm" element={<InscriptionForm />} />
 
 
 

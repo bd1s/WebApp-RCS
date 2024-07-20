@@ -1,0 +1,40 @@
+const { DataTypes } = require('sequelize');
+
+module.exports = (sequelize, DataTypes) => {
+  const DemandeRetraitDefinitifs = sequelize.define('DemandeRetraitDefinitifs', {
+    id_demande: {
+      type: DataTypes.INTEGER,
+      primaryKey: true,
+      references: {
+        model: 'Demandes',
+        key: 'id_demande'
+      },
+      onDelete: 'CASCADE',
+    },
+    motif_retrait: {
+      type: DataTypes.STRING,
+      allowNull: false,
+    },
+    date_retrait: {
+      type: DataTypes.DATEONLY,
+      allowNull: false,
+    },
+    observations: {
+      type: DataTypes.TEXT,
+      allowNull: true,
+    },
+    fichier_retrait_definitif: {
+      type: DataTypes.BLOB('long'),
+      allowNull: true,
+    },
+  });
+
+  DemandeRetraitDefinitifs.associate = (models) => {
+    DemandeRetraitDefinitifs.belongsTo(models.Demande, {
+      foreignKey: 'id_demande',
+      onDelete: 'CASCADE',
+    });
+  };
+
+  return DemandeRetraitDefinitifs;
+};
