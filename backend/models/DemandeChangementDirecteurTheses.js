@@ -3,10 +3,16 @@
 module.exports = (sequelize, DataTypes) => {
     const DemandeChangementDirecteurTheses = sequelize.define('DemandeChangementDirecteurTheses', {
       id_demande: {
-        type: DataTypes.INTEGER,
-        primaryKey: true,
-        autoIncrement: true,
+      type: DataTypes.INTEGER,
+      primaryKey: true,
+      allowNull: false,
+      references: {
+        model: 'Demandes',
+        key: 'id_demande',
       },
+      onUpdate: 'CASCADE',
+      onDelete: 'CASCADE',
+    },
       directeur_actuel: {
         type: DataTypes.STRING,
         allowNull: false,

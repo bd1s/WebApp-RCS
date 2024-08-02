@@ -13,13 +13,13 @@ module.exports = (sequelize, DataTypes) => {
     id_demande: {
       type: DataTypes.INTEGER,
       primaryKey: true,
+      allowNull: false,
       references: {
         model: 'Demandes',
-        key: 'id_demande'
+        key: 'id_demande',
       },
+      onUpdate: 'CASCADE',
       onDelete: 'CASCADE',
-      allowNull: false
-    
     },
     titre_these: DataTypes.STRING,
     directeur_these: DataTypes.STRING,

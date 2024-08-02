@@ -10,8 +10,8 @@ module.exports = (sequelize, DataTypes) => {
         model: 'Demandes',
         key: 'id_demande'
       },
-      onDelete: 'CASCADE',
-    },
+      onUpdate: 'CASCADE',
+      onDelete: 'CASCADE',    },
     numero_etudiant: {
       type: DataTypes.STRING,
       allowNull: false,

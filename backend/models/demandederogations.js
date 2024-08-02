@@ -5,7 +5,13 @@ module.exports = (sequelize, DataTypes) => {
     id_demande: {
       type: DataTypes.INTEGER,
       primaryKey: true,
-      autoIncrement: true,
+      allowNull: false,
+      references: {
+        model: 'Demandes',
+        key: 'id_demande',
+      },
+      onUpdate: 'CASCADE',
+      onDelete: 'CASCADE',
     },
     annee_academique: {
       type: DataTypes.STRING,

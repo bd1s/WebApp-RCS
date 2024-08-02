@@ -1,7 +1,5 @@
 'use strict';
-const { DataTypes } = require('sequelize');
-
-module.exports = (sequelize) => {
+module.exports = (sequelize,DataTypes) => {
   const Cotutelles = sequelize.define('Cotutelles', {
     id_demande: {
       type: DataTypes.INTEGER,
@@ -10,8 +8,12 @@ module.exports = (sequelize) => {
       references: {
         model: 'Demandes',
         key: 'id_demande'
-      }
+      },
+      onUpdate: 'CASCADE',
+      onDelete: 'CASCADE',
+      allowNull: false
     },
+    
     universite_partenaire: {
       type: DataTypes.STRING,
       allowNull: false

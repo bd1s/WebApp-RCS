@@ -427,6 +427,15 @@ const requestPasswordReset = async (req, res) => {
 };
 
 
+const logout = async (req, res) => {
+  try {
+
+    res.status(200).json({ msg: 'Déconnexion réussie' });
+  } catch (err) {
+    console.error('Erreur lors de la déconnexion :', err);
+    res.status(500).json({ msg: 'Erreur du serveur', error: err.message });
+  }
+};
 
 module.exports = {
   register,
@@ -434,6 +443,7 @@ module.exports = {
   getAllUsers,
   requestPasswordReset,
   verifyUser,
-  resetPassword 
+  resetPassword,
+  logout  
 };
 

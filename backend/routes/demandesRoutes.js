@@ -45,12 +45,11 @@
 
 
 
-// routes/demandeRoutes.js
 // routes/demandesRoutes.js
 const express = require('express');
 const router = express.Router();
 const demandeController = require('../controllers/demandeController');
-const demandeRetraitProvisoireController = require('../controllers/demandeRetraitProvisoire');
+
 
 const verifyToken = require('../middleware/verifyToken');
 const upload = require('../middleware/upload');
@@ -71,6 +70,14 @@ router.post('/changement-codirecteur-these', verifyToken, upload.single('fichier
 router.post('/imists', verifyToken, upload.single('fichiers_cv'), demandeController.createDemande);
 router.post('/tirage', verifyToken, upload.single('fichier_demande_tirage'), demandeController.createDemande);
 
+// router.get('/all', verifyToken, demandeController.getAllDemandes);
+
+// router.get('/:id_demande', verifyToken, demandeController.getDemande);
+// router.get('/getDemandesForDoctorant', verifyToken, demandeController.getDemandesForDoctorant);
+router.get('/doctorant/:doctorantId', verifyToken, demandeController.getDemandesForDoctorant);
+router.get('/:id_demande', verifyToken, demandeController.getDemandeById); // Nouvelle route GET pour récupérer une demande par ID
+
+router.put('/:id_demande', verifyToken, upload.single('fichier'), demandeController.updateDemande);
 
 module.exports = router;
 

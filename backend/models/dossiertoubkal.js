@@ -9,6 +9,7 @@ module.exports = (sequelize, DataTypes) => {
         model: 'Demandes',
         key: 'id_demande'
       },
+      onUpdate: 'CASCADE',
       onDelete: 'CASCADE',
       allowNull: false
     },

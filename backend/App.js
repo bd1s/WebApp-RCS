@@ -4,6 +4,7 @@ const cors = require('cors');
 const authRoutes = require('./routes/authRoutes');  
 const doctorantRoutes = require('./routes/doctorantRoutes');
 const demandesRoutes = require('./routes/demandesRoutes');
+const dossierSoutenanceRoutes =require('./routes/dossierSoutenanceRoutes')
 require('dotenv').config();
 app.use(cors()); 
 // Middleware
@@ -14,6 +15,7 @@ app.use('/api/auth', authRoutes);
 app.use('/api/doctorant', doctorantRoutes); 
 app.use('/api/demandes', demandesRoutes);
 
+// app.use('/api/demandes', dossierSoutenanceRoutes);
 
 
 module.exports = app;
