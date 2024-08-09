@@ -1,56 +1,17 @@
 
 
-const { Utilisateur, Doctorant } = require('../models');
-
-// const Utilisateur = require('../models/utilisateur');
+const { Utilisateur, Doctorant, Administrateur,Enseignant  } = require('../models');
 const bcrypt = require('bcrypt');
 const jwt = require('jsonwebtoken');
-const crypto = require('crypto'); // Pour générer le token de réinitialisation
+const crypto = require('crypto'); 
 require('dotenv').config();
 const { Op } = require('sequelize');
 const { sendConfirmationEmail, sendPasswordResetEmail } = require('../nodemailer'); 
-// const { Doctorant } = require('../models/doctorant'); // Importez les modèles associés
-
-
-const sequelize = require('../config/database'); // Assurez-vous que le chemin vers votre fichier de configuration Sequelize est correct
-
-
-// const register = async (req, res) => {
-//   try {
-//     const { email, password, role, prenom, nom, tele } = req.body;
-
-//     // Validate password length
-//     if (password.length < 8) {
-//       return res.status(400).json({ msg: 'Le mot de passe doit comporter au moins 8 caractères' });
-//     }
-
-//     // Hash the password before storing it in the database
-//     const hashedPassword = await bcrypt.hash(password, 10);
-
-//     // Debugging: log the hashed password
-//     console.log('Hashed password (registration):', hashedPassword);
-
-//     // Create new user
-//     const newUser = await Utilisateur.create({
-//       email,
-//       mot_de_passe_hache: hashedPassword,
-//       role,
-//       prenom,
-//       nom,
-//       tele,
-//     });
-
-//     res.status(201).json({ msg: 'Utilisateur enregistré avec succès', user: newUser });
-//   } catch (err) {
-//     console.error('Erreur lors de l\'enregistrement de l\'utilisateur :', err);
-//     res.status(500).json({ msg: 'Erreur du serveur', error: err.message });
-//   }
-// };
-
+const sequelize = require('../config/database'); 
 
 const register = async (req, res) => {
   try {
-    const { email, password, role, prenom, nom, tele } = req.body;
+    const { email, password, role, prenom, nom, tele, role_administratif, departement, departement_enseignement, specialisation } = req.body;
 
     // Validate password length
     if (password.length < 8) {
@@ -89,23 +50,23 @@ const register = async (req, res) => {
       case 'Doctorant':
         newProfile = await Doctorant.create({
           id_utilisateur: newUser.id_utilisateur,
-          // Ajoutez d'autres champs spécifiques au doctorant si nécessaire
         });
         break;
       case 'Admin':
-        // Commenté pour le moment car le modèle Admin n'est pas encore créé
-        // newProfile = await Admin.create({
-        //   id_utilisateur: newUser.id_utilisateur,
-        //   // Ajoutez d'autres champs spécifiques à l'admin si nécessaire
-        // });
+        case 'Admin':
+        newProfile = await Administrateur.create({
+          id_utilisateur: newUser.id_utilisateur,
+          role_administratif, 
+          departement,
+        });
         break;
-      case 'Enseignant':
-        // Commenté pour le moment car le modèle Enseignant n'est pas encore créé
-        // newProfile = await Enseignant.create({
-        //   id_utilisateur: newUser.id_utilisateur,
-        //   // Ajoutez d'autres champs spécifiques à l'enseignant si nécessaire
-        // });
-        break;
+        case 'Enseignant':
+          newProfile = await Enseignant.create({
+            id_utilisateur: newUser.id_utilisateur,
+            departement_enseignement,
+            specialisation,
+          });
+          break;
       default:
         throw new Error('Rôle non pris en charge');
     }

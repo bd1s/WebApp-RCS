@@ -229,7 +229,6 @@ if (!universitairesInfo) {
 
 
     // Informations du cycle doctoral
-    // Informations du cycle doctoral
 let cycleDoctoralInfo = await InfosCycleDoctorals.findOne({ where: { id_doctorant } });
 
 if (!cycleDoctoralInfo) {
@@ -238,26 +237,30 @@ if (!cycleDoctoralInfo) {
     id_doctorant,
     formation_doctorale: req.body.formation_doctorale,
     annee_soutenance_prevue: req.body.annee_soutenance_prevue,
-    specialite: req.body.specialite,
     directeur_these: req.body.directeur_these,
     structure_recherche_directeur: req.body.structure_recherche_directeur,
     co_directeur_these: req.body.co_directeur_these,
     structure_recherche_co_directeur: req.body.structure_recherche_co_directeur,
     universite_cotutelle: req.body.universite_cotutelle,
-    sujet_recherche: req.body.sujet_recherche
+    sujet_recherche: req.body.sujet_recherche,
+    enseignant_encadrant: req.body.enseignant_encadrant, // Nouveau champ
+    departement_doctorant: req.body.departement_doctorant, // Nouveau champ
+    specialisation_doctorant: req.body.specialisation_doctorant // Nouveau champ
   });
 } else {
   // Mettre à jour les informations existantes
   await InfosCycleDoctorals.update({
     formation_doctorale: req.body.formation_doctorale,
     annee_soutenance_prevue: req.body.annee_soutenance_prevue,
-    specialite: req.body.specialite,
     directeur_these: req.body.directeur_these,
     structure_recherche_directeur: req.body.structure_recherche_directeur,
     co_directeur_these: req.body.co_directeur_these,
     structure_recherche_co_directeur: req.body.structure_recherche_co_directeur,
     universite_cotutelle: req.body.universite_cotutelle,
-    sujet_recherche: req.body.sujet_recherche
+    sujet_recherche: req.body.sujet_recherche,
+    enseignant_encadrant: req.body.enseignant_encadrant ,// Nouveau champ
+    departement_doctorant: req.body.departement_doctorant, // Nouveau champ
+    specialisation_doctorant: req.body.specialisation_doctorant // Nouveau champ
   }, {
     where: { id_doctorant }
   });

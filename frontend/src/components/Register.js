@@ -1,62 +1,8 @@
 // // src/components/Register.jsx
-// import React from "react";
-// import Header from "./atoms/header";
-
-// const Register = () => {
-//   return (
-//     <div className="flex flex-col pt-4 h-full w-9/12">
-//       <Header />
-//       <div className="flex flex-col items-center bg-[#9CD8ED] w-fit p-24 self-center justify-self-center rounded-3xl gap-4">
-//         <h2 className="text-6xl">Inscription</h2>
-//         <form className="flex flex-col gap-1 w-96 items-center">
-//           <div className="form-group w-full ">
-//             <label htmlFor="text">Nom</label>
-//             <input type="text" className="form-control" id="nom" />
-//           </div>
-//           <div className="form-group w-full ">
-//             <label htmlFor="text">Prenom</label>
-//             <input type="text" className="form-control" id="prenom" />
-//           </div>
-//           <div className="form-group w-full ">
-//             <label htmlFor="email">Email</label>
-//             <input type="email" className="form-control" id="email" />
-//           </div>
-//           <div className="form-group w-full ">
-//             <label htmlFor="password">Mot de passe</label>
-//             <input type="password" className="form-control" id="password" />
-//           </div>
-//           <div className="form-group w-full ">
-//             <label htmlFor="confirmPassword">Confirmer le mot de passe</label>
-//             <input
-//               type="password"
-//               className="form-control"
-//               id="confirmPassword"
-//             />
-//           </div>
-//           <button
-//             type="submit"
-//             className="btn btn-primary bg-[#11A86D] border-0 hover:bg-[#29CD8D]"
-//           >
-//             S'inscrire
-//           </button>
-//         </form>
-//       </div>
-//     </div>
-//   );
-// };
-
-// export default Register;
-
-
-
-
-
-
-
-// // src/components/Register.jsx
 // import React, { useState } from 'react';
-// import axios from 'axios';
+// import { useNavigate } from 'react-router-dom';
 // import Header from "./atoms/header";
+// import axios from '../api/axios';
 
 // const Register = () => {
 //   const [formData, setFormData] = useState({
@@ -68,6 +14,8 @@
 //     role: 'Doctorant' // Valeur par défaut
 //   });
 
+//   const navigate = useNavigate();
+
 //   const handleChange = (e) => {
 //     setFormData({ ...formData, [e.target.id]: e.target.value });
 //   };
@@ -75,9 +23,10 @@
 //   const handleSubmit = async (e) => {
 //     e.preventDefault();
 //     try {
-//       const response = await axios.post('http://localhost:3001/api/auth/register', formData);
+//       const response = await axios.post('/auth/register', formData);
 //       console.log(response.data);
 //       // Handle success, e.g., show a success message or redirect to login
+//       navigate('/login'); // Redirection après succès de l'inscription
 //     } catch (error) {
 //       console.error('Registration error:', error.response.data);
 //       // Handle error, e.g., show an error message
@@ -179,8 +128,6 @@
 // export default Register;
 
 
-
-// src/components/Register.jsx
 import React, { useState } from 'react';
 import { useNavigate } from 'react-router-dom';
 import Header from "./atoms/header";
@@ -193,7 +140,11 @@ const Register = () => {
     prenom: '',
     nom: '',
     tele: '',
-    role: 'Doctorant' // Valeur par défaut
+    role: 'Doctorant', // Valeur par défaut
+    role_administratif: '', // Ajouté pour Administrateur
+    departement: '' ,
+    departement_enseignement: '', // Ajouté pour Enseignant
+    specialisation: ''// Ajouté pour Administrateur
   });
 
   const navigate = useNavigate();
@@ -291,10 +242,69 @@ const Register = () => {
               required
             >
               <option value="Doctorant">Doctorant</option>
-              <option value="Administrateur">Administrateur</option>
+              <option value="Admin">Administrateur</option>
               <option value="Enseignant">Enseignant</option>
             </select>
           </div>
+          
+          {/* Afficher les champs spécifiques en fonction du rôle */}
+          {formData.role === 'Admin' && (
+            <>
+              <div className="form-group w-full">
+                <label htmlFor="role_administratif">Rôle Administratif</label>
+                <input 
+                  type="text" 
+                  className="form-control" 
+                  id="role_administratif" 
+                  placeholder="Rôle Administratif"
+                  value={formData.role_administratif}
+                  onChange={handleChange}
+                  required
+                />
+              </div>
+              <div className="form-group w-full">
+                <label htmlFor="departement">Département</label>
+                <input 
+                  type="text" 
+                  className="form-control" 
+                  id="departement" 
+                  placeholder="Département"
+                  value={formData.departement}
+                  onChange={handleChange}
+                  required
+                />
+              </div>
+            </>
+          )}
+          {formData.role === 'Enseignant' && (
+            <>
+              <div className="form-group w-full">
+                <label htmlFor="departement_enseignement">Département d'enseignement</label>
+                <input 
+                  type="text" 
+                  className="form-control" 
+                  id="departement_enseignement" 
+                  placeholder="Département d'enseignement"
+                  value={formData.departement_enseignement}
+                  onChange={handleChange}
+                  required
+                />
+              </div>
+              <div className="form-group w-full">
+                <label htmlFor="specialisation">Spécialisation</label>
+                <input 
+                  type="text" 
+                  className="form-control" 
+                  id="specialisation" 
+                  placeholder="Spécialisation"
+                  value={formData.specialisation}
+                  onChange={handleChange}
+                  required
+                />
+              </div>
+            </>
+          )}
+          
           <button
             type="submit"
             className="btn btn-primary bg-[#11A86D] border-0 hover:bg-[#29CD8D]"
@@ -308,3 +318,4 @@ const Register = () => {
 };
 
 export default Register;
+

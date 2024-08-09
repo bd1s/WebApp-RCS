@@ -155,7 +155,7 @@ const DoctorDashboard = () => {
             <Request fillColor="white" width={32} height={32} />
             <p>Requests</p>
           </Link>
-          <Link to="Calendar" className="flex flex-row gap-1 text-lg items-center text-white">
+          <Link to="Calendrie" className="flex flex-row gap-1 text-lg items-center text-white">
             <div className="p-[5px]">
               <Calendar fillColor="white" width={22} height={22} />
             </div>

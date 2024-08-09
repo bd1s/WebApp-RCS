@@ -195,7 +195,9 @@ module.exports = (sequelize, DataTypes) => {
   
   Utilisateur.associate = function(models) {
     Utilisateur.hasOne(models.Doctorant, { foreignKey: 'id_utilisateur' });
-    // Ajoutez ici d'autres associations si nécessaire
+    Utilisateur.hasOne(models.Administrateur, { foreignKey: 'id_utilisateur' });
+    Utilisateur.hasOne(models.Enseignant, { foreignKey: 'id_utilisateur' });
+    
   };
 
   return Utilisateur;

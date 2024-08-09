@@ -853,13 +853,16 @@ const DoctorantInfoForm = () => {
     // Informations sur le Cycle Doctoral
     formation_doctorale: '',
     annee_soutenance_prevue: '',
-    specialite: '',
     directeur_these: '',
     structure_recherche_directeur: '',
     co_directeur_these: '',
     structure_recherche_co_directeur: '',
     universite_cotutelle: '',
-    sujet_recherche: ''
+    sujet_recherche: '',
+    enseignant_encadrant: '',
+    departement_doctorant: '',          // Nouveau champ pour le département du doctorant
+    specialisation_doctorant: ''
+    
   });
 
   useEffect(() => {
@@ -898,13 +901,15 @@ const DoctorantInfoForm = () => {
           // Informations sur le Cycle Doctoral
           formation_doctorale: cycleDoctoralInfo.formation_doctorale,
           annee_soutenance_prevue: cycleDoctoralInfo.annee_soutenance_prevue,
-          specialite: cycleDoctoralInfo.specialite,
           directeur_these: cycleDoctoralInfo.directeur_these,
           structure_recherche_directeur: cycleDoctoralInfo.structure_recherche_directeur,
           co_directeur_these: cycleDoctoralInfo.co_directeur_these,
           structure_recherche_co_directeur: cycleDoctoralInfo.structure_recherche_co_directeur,
           universite_cotutelle: cycleDoctoralInfo.universite_cotutelle,
-          sujet_recherche: cycleDoctoralInfo.sujet_recherche
+          sujet_recherche: cycleDoctoralInfo.sujet_recherche,
+          enseignant_encadrant: cycleDoctoralInfo.enseignant_encadrant, // Nouveau champ
+          departement_doctorant: cycleDoctoralInfo.departement_doctorant, // Nouveau champ
+          specialisation_doctorant: cycleDoctoralInfo.specialisation_doctorant // Nouveau champ
         });
       } catch (error) {
         console.error('Erreur lors de la récupération des informations:', error);
@@ -988,13 +993,16 @@ const DoctorantInfoForm = () => {
           <div className="grid grid-cols-2 gap-4 mb-4">
             <input type="text" name="formation_doctorale" value={formData.formation_doctorale} onChange={handleChange} placeholder="Formation doctorale" required className="input-field" />
             <input type="text" name="annee_soutenance_prevue" value={formData.annee_soutenance_prevue} onChange={handleChange} placeholder="Année de soutenance prévue" required className="input-field" />
-            <input type="text" name="specialite" value={formData.specialite} onChange={handleChange} placeholder="Spécialité" required className="input-field" />
             <input type="text" name="directeur_these" value={formData.directeur_these} onChange={handleChange} placeholder="Directeur de thèse" required className="input-field" />
             <input type="text" name="structure_recherche_directeur" value={formData.structure_recherche_directeur} onChange={handleChange} placeholder="Structure de recherche du directeur" required className="input-field" />
             <input type="text" name="co_directeur_these" value={formData.co_directeur_these} onChange={handleChange} placeholder="Co-directeur de thèse" required className="input-field" />
             <input type="text" name="structure_recherche_co_directeur" value={formData.structure_recherche_co_directeur} onChange={handleChange} placeholder="Structure de recherche du co-directeur" required className="input-field" />
             <input type="text" name="universite_cotutelle" value={formData.universite_cotutelle} onChange={handleChange} placeholder="Université de cotutelle" required className="input-field" />
             <input type="text" name="sujet_recherche" value={formData.sujet_recherche} onChange={handleChange} placeholder="Sujet de recherche" required className="input-field" />
+
+            <input type="text" name="enseignant_encadrant" value={formData.enseignant_encadrant} onChange={handleChange} placeholder="Enseignant encadrant" required className="input-field" />
+            <input type="text" name="departement_doctorant" value={formData.departement_doctorant} onChange={handleChange} placeholder="Département " required className="input-field" />
+            <input type="text" name="specialisation_doctorant" value={formData.specialisation_doctorant} onChange={handleChange} placeholder="Spécialisation " required className="input-field" />
           </div>
 
           <button type="submit" className="bg-blue-500 text-white px-4 py-2 rounded hover:bg-blue-700 mt-4">Enregistrer</button>

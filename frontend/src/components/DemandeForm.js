@@ -969,6 +969,8 @@ const DemandeForm = () => {
         if (demandeData[key] !== null && demandeData[key] !== undefined) {
           if (key === 'fichier_demande' || key === 'fichier_demande_retrait' || key === 'fichier_retrait_definitif' || key === 'fichier_carte_etudiant' || key === 'fichier_demande_changement_sujet'|| key === 'fichier_demande_changement_directeur'|| key === 'fichier_demande_reinscription' || key === 'fichier_demande_stage'|| key === 'fichier_demande_cotutelle'|| key === 'fichier_demande_changement_codirecteur'|| key === 'fichiers_cv'|| key === 'fichier_demande_tirage'|| key === 'Fichier_demande_tirage' ) {
             formDataToSend.append(key, demandeData[key]);
+            console.log('FormData:', formData);
+
           } else {
             formDataToSend.append(`demandeData[${key}]`, demandeData[key]);
           }
@@ -1039,6 +1041,7 @@ const DemandeForm = () => {
       console.error('Erreur lors de la création de la demande:', error);
     }
   };
+  
   // const navigate = useNavigate(); // Hook pour la navigation
 
   // const handleAddClick = () => {

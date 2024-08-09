@@ -27,10 +27,6 @@ module.exports = (sequelize, DataTypes) => {
       type: DataTypes.STRING,
       allowNull: false,
     },
-    specialite: {
-      type: DataTypes.STRING,
-      allowNull: false,
-    },
     directeur_these: {
       type: DataTypes.STRING,
       allowNull: false,
@@ -55,6 +51,18 @@ module.exports = (sequelize, DataTypes) => {
       type: DataTypes.STRING,
       allowNull: false,
     },
+    enseignant_encadrant: {
+      type: DataTypes.STRING,
+      allowNull: true, // Mettre à false si ce champ est obligatoire
+    },
+    departement_doctorant: {
+      type: DataTypes.STRING,
+      allowNull: true, // Mettre à false si ce champ est obligatoire
+    },
+    specialisation_doctorant: {
+      type: DataTypes.STRING,
+      allowNull: true, // Mettre à false si ce champ est obligatoire
+    },
   }, {});
   
   InfosCycleDoctorals.associate = function(models) {
@@ -63,3 +71,34 @@ module.exports = (sequelize, DataTypes) => {
 
   return InfosCycleDoctorals;
 };
+
+
+// models/infosCycleDoctoral.js
+// 'use strict';
+// module.exports = (sequelize, DataTypes) => {
+//   const InfosCycleDoctorals = sequelize.define('InfosCycleDoctorals', {
+//     id: {
+//       type: DataTypes.INTEGER,
+//       autoIncrement: true,
+//       primaryKey: true,
+//       allowNull: false,
+//     },
+//     id_doctorant: {
+//       type: DataTypes.INTEGER,
+//       allowNull: false,
+//       references: {
+//         model: 'Doctorants',
+//         key: 'id_doctorant',
+//       },
+//       onUpdate: 'CASCADE',
+//       onDelete: 'CASCADE',
+//     },
+//     // Les autres champs
+//   }, {});
+
+//   InfosCycleDoctorals.associate = function(models) {
+//     InfosCycleDoctorals.belongsTo(models.Doctorant, { foreignKey: 'id_doctorant' });
+//   };
+
+//   return InfosCycleDoctorals;
+// };

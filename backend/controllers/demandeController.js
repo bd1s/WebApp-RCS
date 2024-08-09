@@ -544,7 +544,6 @@ exports.updateDemande = async (req, res) => {
     }
 
     let updatedDemandeDetails = null;
-// Exemple de vérification dans le backend
 
     // Logique de mise à jour selon le type de demande
     if (type_demande === 'inscription') {
@@ -669,6 +668,9 @@ exports.updateDemande = async (req, res) => {
     if (!updatedDemandeDetails) {
       return res.status(400).json({ message: 'Échec de la mise à jour de la demande.' });
     }
+
+    console.log('Type de demande:', type_demande);
+console.log('Données de la demande:', demandeData);
 
     res.status(200).json({ message: 'Demande mise à jour avec succès.', updatedDemandeDetails });
   } catch (error) {

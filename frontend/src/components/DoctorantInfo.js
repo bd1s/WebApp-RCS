@@ -437,7 +437,7 @@ const DoctorantInfo = () => {
           </div>
         </div>
 
-        <h2 className="text-xl font-bold mb-3">Informations sur le Cycle Doctoral</h2>
+        {/* <h2 className="text-xl font-bold mb-3">Informations sur le Cycle Doctoral</h2>
         <div className="grid grid-cols-1 md:grid-cols-2 gap-2 mb-3">
           <div>
             <p className="text-gray-700 text-sm"><span className="font-semibold">Formation Doctorale:</span> {doctorantInfo.cycleDoctoralInfo?.formation_doctorale || "Non renseigné"}</p>
@@ -452,7 +452,26 @@ const DoctorantInfo = () => {
             <p className="text-gray-700 text-sm"><span className="font-semibold">Université en Cotutelle:</span> {doctorantInfo.cycleDoctoralInfo?.universite_cotutelle || "Non renseigné"}</p>
             <p className="text-gray-700 text-sm"><span className="font-semibold">Sujet de Recherche:</span> {doctorantInfo.cycleDoctoralInfo?.sujet_recherche || "Non renseigné"}</p>
           </div>
-          </div>
+          </div> */}
+          <h2 className="text-xl font-bold mb-3">Informations sur le Cycle Doctoral</h2>
+<div className="grid grid-cols-1 md:grid-cols-2 gap-2 mb-3">
+  <div>
+    <p className="text-gray-700 text-sm"><span className="font-semibold">Formation Doctorale:</span> {doctorantInfo.cycleDoctoralInfo?.formation_doctorale || "Non renseigné"}</p>
+    <p className="text-gray-700 text-sm"><span className="font-semibold">Année de Soutenance Prévue:</span> {doctorantInfo.cycleDoctoralInfo?.annee_soutenance_prevue || "Non renseigné"}</p>
+    <p className="text-gray-700 text-sm"><span className="font-semibold">Département :</span> {doctorantInfo.cycleDoctoralInfo?.departement_doctorant || "Non renseigné"}</p>
+    <p className="text-gray-700 text-sm"><span className="font-semibold">Spécialisation :</span> {doctorantInfo.cycleDoctoralInfo?.specialisation_doctorant || "Non renseigné"}</p>
+  </div>
+  <div>
+  <p className="text-gray-700 text-sm"><span className="font-semibold">Enseignant Encadrant:</span> {doctorantInfo.cycleDoctoralInfo?.enseignant_encadrant || "Non renseigné"}</p>
+  <p className="text-gray-700 text-sm"><span className="font-semibold">Sujet de Recherche:</span> {doctorantInfo.cycleDoctoralInfo?.sujet_recherche || "Non renseigné"}</p>
+    <p className="text-gray-700 text-sm"><span className="font-semibold">Directeur de Thèse:</span> {doctorantInfo.cycleDoctoralInfo?.directeur_these || "Non renseigné"}</p>
+    <p className="text-gray-700 text-sm"><span className="font-semibold">Structure de Recherche Directeur:</span> {doctorantInfo.cycleDoctoralInfo?.structure_recherche_directeur || "Non renseigné"}</p>
+    <p className="text-gray-700 text-sm"><span className="font-semibold">Co-directeur de Thèse:</span> {doctorantInfo.cycleDoctoralInfo?.co_directeur_these || "Non renseigné"}</p>
+    <p className="text-gray-700 text-sm"><span className="font-semibold">Structure de Recherche Co-directeur:</span> {doctorantInfo.cycleDoctoralInfo?.structure_recherche_co_directeur || "Non renseigné"}</p>
+    <p className="text-gray-700 text-sm"><span className="font-semibold">Université en Cotutelle:</span> {doctorantInfo.cycleDoctoralInfo?.universite_cotutelle || "Non renseigné"}</p>
+  </div>
+</div>
+
 
       <button onClick={handleEditClick} className="bg-blue-500 text-white px-4 py-2 rounded hover:bg-blue-700 mt-4">Modifier les informations</button>
     </div>

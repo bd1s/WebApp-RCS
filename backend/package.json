@@ -30,6 +30,7 @@
     "bcryptjs": "^2.4.3",
     "body-parser": "^1.20.2",
     "cors": "^2.8.5",
+    "date-fns": "^3.6.0",
     "dotenv": "^16.4.5",
     "express": "^4.19.2",
     "jsonwebtoken": "^9.0.2",
@@ -37,6 +38,8 @@
     "mysql": "^2.18.1",
     "mysql2": "^3.10.2",
     "nodemailer": "^6.9.14",
-    "sequelize": "^6.37.3"
+    "react-big-calendar": "^1.13.1",
+    "sequelize": "^6.37.3",
+    "socket.io": "^4.7.5"
   }
 }

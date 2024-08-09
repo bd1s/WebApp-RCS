@@ -55,6 +55,19 @@ module.exports = (sequelize, DataTypes) => {
       type: DataTypes.STRING,
       allowNull: false,
     },
+    enseignant_encadrant: {
+      type: DataTypes.STRING,
+      allowNull: true, // Mettre à false si ce champ est obligatoire
+    },
+    departement_doctorant: {
+      type: DataTypes.STRING,
+      allowNull: true, // Mettre à false si ce champ est obligatoire
+    },
+    specialisation_doctorant: {
+      type: DataTypes.STRING,
+      allowNull: true, // Mettre à false si ce champ est obligatoire
+    },
+    
   }, {});
   
   InfosCycleDoctorals.associate = function(models) {
