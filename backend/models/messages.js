@@ -17,6 +17,7 @@ module.exports = (sequelize, DataTypes) => {
       date_envoi: {
         type: DataTypes.DATE,
         allowNull: false,
+        default: new Date.now(),
       },
       id_expediteur: {
         type: DataTypes.INTEGER,
