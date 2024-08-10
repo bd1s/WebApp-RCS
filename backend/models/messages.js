@@ -17,7 +17,7 @@ module.exports = (sequelize, DataTypes) => {
       date_envoi: {
         type: DataTypes.DATE,
         allowNull: false,
-        default: new Date.now(),
+        default: DataTypes.NOW,
       },
       id_expediteur: {
         type: DataTypes.INTEGER,
@@ -44,8 +44,8 @@ module.exports = (sequelize, DataTypes) => {
   );
 
   Messages.associate = function (models) {
-    Messages.belongsTo(models.Users, { foreignKey: "id_expediteur" });
-    Messages.belongsTo(models.Users, { foreignKey: "id_destinataire" });
+    Messages.belongsTo(models.Utilisateur, { foreignKey: "id_expediteur" });
+    Messages.belongsTo(models.Utilisateur, { foreignKey: "id_destinataire" });
   };
 
   return Messages;
