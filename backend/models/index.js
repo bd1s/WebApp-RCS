@@ -108,6 +108,7 @@ fs.readdirSync(__dirname)
   .forEach(file => {
     const model = require(path.join(__dirname, file))(sequelize, Sequelize.DataTypes);
     db[model.name] = model;
+
   });
 
 // Associe tous les modèles si une méthode 'associate' est définie
@@ -117,6 +118,7 @@ Object.keys(db).forEach(modelName => {
   }
 });
 
+console.log(db.Document);
 db.sequelize = sequelize;
 db.Sequelize = Sequelize;
 

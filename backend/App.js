@@ -68,6 +68,9 @@ const encadrementRoutes = require('./routes/encadrementRoutes');
 const dashboardRoutes = require('./routes/dashboardRoutes');
 const eventRoutes = require('./routes/eventRoutes');
 const adminRoutes = require('./routes/adminRoutes');
+const documentRoutes = require('./routes/documentRoutes');
+const uploadRoutes = require('./routes/uploadRoutes');
+
 
 
 require('dotenv').config();
@@ -93,6 +96,10 @@ app.use('/api/dashboard', dashboardRoutes);
 app.use('/api', eventRoutes);
 
 app.use('/api/admin', adminRoutes);
+// Route pour les documents (création, partage, téléchargement)
+app.use('/api', documentRoutes);
+
+app.use('/api', uploadRoutes);
 
 
 module.exports = app;

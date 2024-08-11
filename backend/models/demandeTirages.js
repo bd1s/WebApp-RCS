@@ -25,8 +25,8 @@ module.exports = (sequelize, DataTypes) => {
       allowNull: false
     },
     fichier_demande: {
-      type: DataTypes.BLOB('long'),
-      allowNull: true
+      type: DataTypes.STRING, 
+      allowNull: true,
     },
     createdAt: {
       type: DataTypes.DATE,

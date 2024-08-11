@@ -18,7 +18,7 @@ module.exports = (sequelize, DataTypes) => {
       allowNull: false,
     },
     fichier_demande_retrait: { // Changement du nom du champ
-      type: DataTypes.BLOB('long'),
+      type: DataTypes.STRING, 
       allowNull: true,
     },
   });

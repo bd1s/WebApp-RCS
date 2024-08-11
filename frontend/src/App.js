@@ -266,10 +266,13 @@ import RequestDetails from './components/RequestDetails';
 import MessageForm from './components/MessageForm';
 import MessageList from './components/MessageList';
 import Messagerie from "./components/Messagerie";
+import UploadDocument from "./components/UploadDocument";
+import SharedDocuments from "./components/SharedDocuments ";
 
 
 const App = () => {
   return (
+
     <Router>
       <div className="flex flex-col items-center h-screen m-0">
         <Routes>
@@ -294,6 +297,10 @@ const App = () => {
             <Route path="DemandeTable" element={<DemandeTable />} />
             <Route path="DossierSoutenanceForm" element={<DossierSoutenanceForm />} />
             <Route path="CalendarForDoctorant" element={<CalendarForDoctorant />} />
+            <Route path="UploadDocument" element={<UploadDocument />} />
+
+
+
 
           </Route>
 
@@ -321,6 +328,8 @@ const App = () => {
             <Route path="MessageList" element={<MessageList />} />
             <Route path="MessageForm" element={<MessageForm />} />
             <Route path="Messagerie" element={<Messagerie />} />
+            <Route path="SharedDocuments" element={<SharedDocuments  />} />
+
 
 
 

@@ -142,7 +142,7 @@ module.exports = (sequelize, DataTypes) => {
       allowNull: false,
     },
     fichier_demande: {
-      type: DataTypes.BLOB('long'),
+      type: DataTypes.STRING, 
       allowNull: true,
     },
   }, {

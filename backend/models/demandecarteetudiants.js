@@ -21,7 +21,7 @@ module.exports = (sequelize, DataTypes) => {
       allowNull: false,
     },
     fichier_carte_etudiant: {
-      type: DataTypes.BLOB('long'),
+      type: DataTypes.STRING, 
       allowNull: true,
     },
   });

@@ -26,7 +26,7 @@ module.exports = (sequelize, DataTypes) => {
       allowNull: true,
     },
     fichier_demande_reinscription: {
-      type: DataTypes.BLOB('long'),
+      type: DataTypes.STRING, 
       allowNull: true,
     },
     createdAt: {

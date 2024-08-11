@@ -48,9 +48,9 @@ const EnseignantDashboard = () => {
             </div>
             <p>Calendar</p>
           </Link> 
-          <Link to="Messagerie" className="flex flex-row gap-1 text-lg items-center text-white">
+          <Link to="SharedDocuments" className="flex flex-row gap-1 text-lg items-center text-white">
             <Request fillColor="white" width={32} height={32} />
-            <p>Vue globale</p>
+            <p>Documents</p>
           </Link>
         </div>
         <div

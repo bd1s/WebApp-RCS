@@ -257,172 +257,6 @@ exports.getDemandesForDoctorant = async (req, res) => {
 
 
 
-// exports.updateDemande = async (req, res) => {
-//   try {
-//     const id_utilisateur = req.user.userId;
-
-//     // Trouver le doctorant correspondant à l'utilisateur
-//     const doctorant = await Doctorant.findOne({ where: { id_utilisateur } });
-//     if (!doctorant) {
-//       return res.status(404).json({ message: 'Doctorant non trouvé pour cet utilisateur.' });
-//     }
-
-//     const id_doctorant = doctorant.id_doctorant; // Utiliser l'ID du doctorant pour la recherche
-
-//     const { id_demande } = req.params;
-//     const { type_demande, demandeData } = req.body;
-
-//     console.log('Utilisateur ID:', id_utilisateur); // Debugging
-//     console.log('ID Demande:', id_demande); // Debugging
-//     console.log('ID Doctorant:', id_doctorant); // Debugging
-
-//     const demande = await Demande.findOne({ where: { id_demande, id_doctorant } });
-
-//     if (!demande) {
-//       return res.status(404).json({ message: 'Demande non trouvée ou accès non autorisé.' });
-//     }
-
-//     let fichier_demande = null;
-//     if (req.file) {
-//       const filePath = path.join(__dirname, '../uploads', req.file.filename);
-//       fichier_demande = fs.readFileSync(filePath);
-//       fs.unlinkSync(filePath); // Supprimer le fichier après lecture
-//       console.log('Fichier de demande lu et supprimé:', req.file.filename);
-//     }
-
-//     let updatedDemandeDetails = null;
-
-//     // Logique de mise à jour selon le type de demande
-//     if (type_demande === 'inscription') {
-//       const { diplomes_precedents, specialisation_souhaitee, notes_transcription } = demandeData;
-//       updatedDemandeDetails = await DemandeInscription.update({
-//         diplomes_precedents,
-//         specialisation_souhaitee,
-//         notes_transcription,
-//         fichier_demande,
-//       }, { where: { id_demande } });
-
-//     } else if (type_demande === 'retrait-provisoire') {
-//       const { motif_retrait, date_debut_prevue, date_retour_prevue } = demandeData;
-//       updatedDemandeDetails = await DemandeRetraitProvisoires.update({
-//         motif_retrait,
-//         date_debut_prevue: new Date(date_debut_prevue),
-//         date_retour_prevue: new Date(date_retour_prevue),
-//         fichier_demande_retrait: fichier_demande,
-//       }, { where: { id_demande } });
-
-//     } else if (type_demande === 'retrait-definitif') {
-//       const { motif_retrait, date_retrait, observations } = demandeData;
-//       updatedDemandeDetails = await DemandeRetraitDefinitifs.update({
-//         motif_retrait,
-//         date_retrait: new Date(date_retrait),
-//         observations,
-//         fichier_retrait_definitif: fichier_demande,
-//       }, { where: { id_demande } });
-
-//     } else if (type_demande === 'carte-etudiant') {
-//       const { numero_etudiant, date_delivrance } = demandeData;
-//       updatedDemandeDetails = await DemandeCarteEtudiants.update({
-//         numero_etudiant,
-//         date_delivrance: new Date(date_delivrance),
-//         fichier_carte_etudiant: fichier_demande,
-//       }, { where: { id_demande } });
-
-//     } else if (type_demande === 'email-academique') {
-//       const { identifiant_souhaite, motif_demande } = demandeData;
-//       updatedDemandeDetails = await DemandeEmailAcademiques.update({
-//         identifiant_souhaite,
-//         motif_demande,
-//       }, { where: { id_demande } });
-
-//     } else if (type_demande === 'changement-sujet-these') {
-//       const { sujet_actuel, nouveau_sujet_propose, justification } = demandeData;
-//       updatedDemandeDetails = await DemandeChangementSujetTheses.update({
-//         sujet_actuel,
-//         nouveau_sujet_propose,
-//         justification,
-//         fichier_demande_changement_sujet: fichier_demande,
-//       }, { where: { id_demande } });
-
-//     } else if (type_demande === 'changement-directeur-these') {
-//       const { directeur_actuel, nouveau_directeur_propose, raisons_changement } = demandeData;
-//       updatedDemandeDetails = await DemandeChangementDirecteurTheses.update({
-//         directeur_actuel,
-//         nouveau_directeur_propose,
-//         raisons_changement,
-//         fichier_demande_changement_directeur: fichier_demande,
-//       }, { where: { id_demande } });
-
-//     } else if (type_demande === 'reinscription-derogation') {
-//       const { annee_academique, motif, decision_prise } = demandeData;
-//       updatedDemandeDetails = await DemandeDerogations.update({
-//         annee_academique,
-//         motif,
-//         decision_prise,
-//         fichier_demande_reinscription: fichier_demande,
-//       }, { where: { id_demande } });
-
-//     } else if (type_demande === 'convention-stage') {
-//       const { entreprise_accueil, periode_stage, objectifs_stage } = demandeData;
-//       updatedDemandeDetails = await ConventionStages.update({
-//         entreprise_accueil,
-//         periode_stage,
-//         objectifs_stage,
-//         fichier_demande_stage: fichier_demande,
-//       }, { where: { id_demande } });
-
-//     } else if (type_demande === 'cotutelle') {
-//       const { universite_partenaire, pays, duree_cotutelle } = demandeData;
-//       updatedDemandeDetails = await Cotutelles.update({
-//         universite_partenaire,
-//         pays,
-//         duree_cotutelle,
-//         fichier_demande_cotutelle: fichier_demande,
-//       }, { where: { id_demande } });
-
-//     } else if (type_demande === 'changement-codirecteur-these') {
-//       const { co_directeur_actuel, nouveau_co_directeur_propose, motifs_changement } = demandeData;
-//       updatedDemandeDetails = await DemandeChangementCodirecteurTheses.update({
-//         co_directeur_actuel,
-//         nouveau_co_directeur_propose,
-//         motifs_changement,
-//         fichier_demande_changement_codirecteur: fichier_demande,
-//       }, { where: { id_demande } });
-
-//     } else if (type_demande === 'imists') {
-//       const { titre_these, directeur_these, date_debut_these, date_prevue_soutenance } = demandeData;
-//       updatedDemandeDetails = await DemandeIMISTs.update({
-//         titre_these,
-//         directeur_these,
-//         date_debut_these,
-//         date_prevue_soutenance,
-//         fichiers_cv: fichier_demande,
-//       }, { where: { id_demande } });
-
-//     } else if (type_demande === 'tirage') {
-//       const { titre_these, nombre_exemplaires, date_soutenance } = demandeData;
-//       updatedDemandeDetails = await DemandeTirages.update({
-//         titre_these,
-//         nombre_exemplaires,
-//         date_soutenance: new Date(date_soutenance),
-//         fichier_demande_tirage: fichier_demande,
-//       }, { where: { id_demande } });
-
-//     }
-
-//     if (!updatedDemandeDetails) {
-//       return res.status(400).json({ message: 'Échec de la mise à jour de la demande.' });
-//     }
-
-//     res.status(200).json({ message: 'Demande mise à jour avec succès.', updatedDemandeDetails });
-//   } catch (error) {
-//     console.error('Erreur lors de la mise à jour de la demande:', error);
-//     res.status(500).json({ error: 'Échec de la mise à jour de la demande' });
-//   }
-// };
-
-
-
 // Méthode GET pour récupérer les informations d'une demande
 exports.getDemandeById = async (req, res) => {
   try {
@@ -678,3 +512,228 @@ console.log('Données de la demande:', demandeData);
     res.status(500).json({ error: 'Échec de la mise à jour de la demande' });
   }
 };
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+// exports.updateDemande = async (req, res) => {
+//   try {
+//     const id_utilisateur = req.user.userId;
+
+//     // Trouver le doctorant correspondant à l'utilisateur
+//     const doctorant = await Doctorant.findOne({ where: { id_utilisateur } });
+//     if (!doctorant) {
+//       return res.status(404).json({ message: 'Doctorant non trouvé pour cet utilisateur.' });
+//     }
+
+//     const id_doctorant = doctorant.id_doctorant; // Utiliser l'ID du doctorant pour la recherche
+
+//     const { id_demande } = req.params;
+//     const { type_demande, demandeData } = req.body;
+
+//     console.log('Utilisateur ID:', id_utilisateur); // Debugging
+//     console.log('ID Demande:', id_demande); // Debugging
+//     console.log('ID Doctorant:', id_doctorant); // Debugging
+
+//     const demande = await Demande.findOne({ where: { id_demande, id_doctorant } });
+
+//     if (!demande) {
+//       return res.status(404).json({ message: 'Demande non trouvée ou accès non autorisé.' });
+//     }
+
+//     let fichier_demande = null;
+//     if (req.file) {
+//       const filePath = path.join(__dirname, '../uploads', req.file.filename);
+//       fichier_demande = fs.readFileSync(filePath);
+//       fs.unlinkSync(filePath); // Supprimer le fichier après lecture
+//       console.log('Fichier de demande lu et supprimé:', req.file.filename);
+//     }
+
+//     let updatedDemandeDetails = null;
+
+//     // Logique de mise à jour selon le type de demande
+//     if (type_demande === 'inscription') {
+//       const { diplomes_precedents, specialisation_souhaitee, notes_transcription } = demandeData;
+//       updatedDemandeDetails = await DemandeInscription.update({
+//         diplomes_precedents,
+//         specialisation_souhaitee,
+//         notes_transcription,
+//         fichier_demande,
+//       }, { where: { id_demande } });
+
+//     } else if (type_demande === 'retrait-provisoire') {
+//       const { motif_retrait, date_debut_prevue, date_retour_prevue } = demandeData;
+//       updatedDemandeDetails = await DemandeRetraitProvisoires.update({
+//         motif_retrait,
+//         date_debut_prevue: new Date(date_debut_prevue),
+//         date_retour_prevue: new Date(date_retour_prevue),
+//         fichier_demande_retrait: fichier_demande,
+//       }, { where: { id_demande } });
+
+//     } else if (type_demande === 'retrait-definitif') {
+//       const { motif_retrait, date_retrait, observations } = demandeData;
+//       updatedDemandeDetails = await DemandeRetraitDefinitifs.update({
+//         motif_retrait,
+//         date_retrait: new Date(date_retrait),
+//         observations,
+//         fichier_retrait_definitif: fichier_demande,
+//       }, { where: { id_demande } });
+
+//     } else if (type_demande === 'carte-etudiant') {
+//       const { numero_etudiant, date_delivrance } = demandeData;
+//       updatedDemandeDetails = await DemandeCarteEtudiants.update({
+//         numero_etudiant,
+//         date_delivrance: new Date(date_delivrance),
+//         fichier_carte_etudiant: fichier_demande,
+//       }, { where: { id_demande } });
+
+//     } else if (type_demande === 'email-academique') {
+//       const { identifiant_souhaite, motif_demande } = demandeData;
+//       updatedDemandeDetails = await DemandeEmailAcademiques.update({
+//         identifiant_souhaite,
+//         motif_demande,
+//       }, { where: { id_demande } });
+
+//     } else if (type_demande === 'changement-sujet-these') {
+//       const { sujet_actuel, nouveau_sujet_propose, justification } = demandeData;
+//       updatedDemandeDetails = await DemandeChangementSujetTheses.update({
+//         sujet_actuel,
+//         nouveau_sujet_propose,
+//         justification,
+//         fichier_demande_changement_sujet: fichier_demande,
+//       }, { where: { id_demande } });
+
+//     } else if (type_demande === 'changement-directeur-these') {
+//       const { directeur_actuel, nouveau_directeur_propose, raisons_changement } = demandeData;
+//       updatedDemandeDetails = await DemandeChangementDirecteurTheses.update({
+//         directeur_actuel,
+//         nouveau_directeur_propose,
+//         raisons_changement,
+//         fichier_demande_changement_directeur: fichier_demande,
+//       }, { where: { id_demande } });
+
+//     } else if (type_demande === 'reinscription-derogation') {
+//       const { annee_academique, motif, decision_prise } = demandeData;
+//       updatedDemandeDetails = await DemandeDerogations.update({
+//         annee_academique,
+//         motif,
+//         decision_prise,
+//         fichier_demande_reinscription: fichier_demande,
+//       }, { where: { id_demande } });
+
+//     } else if (type_demande === 'convention-stage') {
+//       const { entreprise_accueil, periode_stage, objectifs_stage } = demandeData;
+//       updatedDemandeDetails = await ConventionStages.update({
+//         entreprise_accueil,
+//         periode_stage,
+//         objectifs_stage,
+//         fichier_demande_stage: fichier_demande,
+//       }, { where: { id_demande } });
+
+//     } else if (type_demande === 'cotutelle') {
+//       const { universite_partenaire, pays, duree_cotutelle } = demandeData;
+//       updatedDemandeDetails = await Cotutelles.update({
+//         universite_partenaire,
+//         pays,
+//         duree_cotutelle,
+//         fichier_demande_cotutelle: fichier_demande,
+//       }, { where: { id_demande } });
+
+//     } else if (type_demande === 'changement-codirecteur-these') {
+//       const { co_directeur_actuel, nouveau_co_directeur_propose, motifs_changement } = demandeData;
+//       updatedDemandeDetails = await DemandeChangementCodirecteurTheses.update({
+//         co_directeur_actuel,
+//         nouveau_co_directeur_propose,
+//         motifs_changement,
+//         fichier_demande_changement_codirecteur: fichier_demande,
+//       }, { where: { id_demande } });
+
+//     } else if (type_demande === 'imists') {
+//       const { titre_these, directeur_these, date_debut_these, date_prevue_soutenance } = demandeData;
+//       updatedDemandeDetails = await DemandeIMISTs.update({
+//         titre_these,
+//         directeur_these,
+//         date_debut_these,
+//         date_prevue_soutenance,
+//         fichiers_cv: fichier_demande,
+//       }, { where: { id_demande } });
+
+//     } else if (type_demande === 'tirage') {
+//       const { titre_these, nombre_exemplaires, date_soutenance } = demandeData;
+//       updatedDemandeDetails = await DemandeTirages.update({
+//         titre_these,
+//         nombre_exemplaires,
+//         date_soutenance: new Date(date_soutenance),
+//         fichier_demande_tirage: fichier_demande,
+//       }, { where: { id_demande } });
+
+//     }
+
+//     if (!updatedDemandeDetails) {
+//       return res.status(400).json({ message: 'Échec de la mise à jour de la demande.' });
+//     }
+
+//     res.status(200).json({ message: 'Demande mise à jour avec succès.', updatedDemandeDetails });
+//   } catch (error) {
+//     console.error('Erreur lors de la mise à jour de la demande:', error);
+//     res.status(500).json({ error: 'Échec de la mise à jour de la demande' });
+//   }
+// };
+

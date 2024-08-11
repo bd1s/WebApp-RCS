@@ -37,7 +37,7 @@ const DoctorantDashboard = () => {
       <div className="bg-[#9CD8ED] flex flex-col justify-between w-2/12 items-center p-4">
         <img src={fac_logo} alt="fac_logo" className="w-36 h-36" />
         <div>
-          <Link to="DoctorantInfoForm" className="flex flex-row gap-1 text-lg items-center text-white">
+          <Link to="UploadDocument" className="flex flex-row gap-1 text-lg items-center text-white">
             <Notif fillColor="white" width={32} height={32} />
             <p>Notifications</p>
           </Link>

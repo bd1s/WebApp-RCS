@@ -25,8 +25,8 @@ module.exports = (sequelize, DataTypes) => {
       allowNull: false
     },
     fichier_demande_changement_codirecteur: {
-      type: DataTypes.BLOB('long'), // ou DataTypes.STRING si vous utilisez une URL
-      allowNull: true
+      type: DataTypes.STRING, 
+      allowNull: true,
     },
     createdAt: {
       type: DataTypes.DATE,
