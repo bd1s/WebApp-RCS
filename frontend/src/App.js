@@ -298,6 +298,8 @@ const App = () => {
             <Route path="DossierSoutenanceForm" element={<DossierSoutenanceForm />} />
             <Route path="CalendarForDoctorant" element={<CalendarForDoctorant />} />
             <Route path="UploadDocument" element={<UploadDocument />} />
+            <Route path="SharedDocuments" element={<SharedDocuments  />} />
+
 
 
 
@@ -312,11 +314,8 @@ const App = () => {
             <Route path="CalendarForAdmin" element={<CalendarForAdmin />} />
             <Route path="DoctorantRequestsforAdmin" element={<DoctorantRequestsforAdmin />} />
             <Route path="RequestDetails" element={<RequestDetails />} />
-
-
-
-
             <Route path="dashboardDataForAdmin" element={<DashboardDataForAdmin />} />
+            
 
 
           </Route>
@@ -328,6 +327,7 @@ const App = () => {
             <Route path="MessageList" element={<MessageList />} />
             <Route path="MessageForm" element={<MessageForm />} />
             <Route path="Messagerie" element={<Messagerie />} />
+            <Route path="UploadDocument" element={<UploadDocument />} />
             <Route path="SharedDocuments" element={<SharedDocuments  />} />
 
 

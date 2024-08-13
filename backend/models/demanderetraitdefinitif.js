@@ -13,7 +13,7 @@ module.exports = (sequelize, DataTypes) => {
       onUpdate: 'CASCADE',
       onDelete: 'CASCADE',
     },
-    motif_retrait: {
+    motif_retrait_definitif: {
       type: DataTypes.STRING,
       allowNull: false,
     },

@@ -70,7 +70,7 @@ module.exports = (sequelize) => {
       onUpdate: 'CASCADE',
       onDelete: 'CASCADE',
     },
-    titre_these: {
+    titre_de_these: {
       type: DataTypes.STRING,
       allowNull: true,
     },

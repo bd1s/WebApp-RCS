@@ -1,5 +1,5 @@
 
-// controllers/uploadController.js
+// controllers/uploadDemandeController.js
 const multer = require('multer');
 const path = require('path');
 const s3 = require('../config/aws');
@@ -8,16 +8,14 @@ const { PutObjectCommand } = require('@aws-sdk/client-s3');
 const storage = multer.memoryStorage();
 const upload = multer({ storage });
 
-const uploadFile = async (req, res) => {
+const uploadFile = async (req, res, next) => {
   try {
     if (!req.file) {
-      console.log('Aucun fichier uploadé');  // Log pour vérifier l'absence de fichier
+      console.log('Aucun fichier uploadé');
       return res.status(400).json({ error: 'Aucun fichier uploadé' });
     }
 
     const file = req.file;
-
-    // Log pour vérifier les détails du fichier
     console.log('Détails du fichier reçu:', {
       originalname: file.originalname,
       mimetype: file.mimetype,
@@ -31,23 +29,24 @@ const uploadFile = async (req, res) => {
       ACL: 'public-read',
     };
 
-    console.log('Paramètres d\'upload:', uploadParams);  // Log pour vérifier les paramètres d'upload
+    console.log('Paramètres d\'upload:', uploadParams);
 
     const command = new PutObjectCommand(uploadParams);
     const result = await s3.send(command);
 
-    console.log('Résultat de l\'upload:', result);  // Log pour vérifier le résultat de l'upload
+    console.log('Résultat de l\'upload:', result);
 
     const fileUrl = `https://${process.env.DO_SPACES_NAME}.${process.env.DO_SPACES_ENDPOINT.replace('https://', '')}/${uploadParams.Key}`;
     console.log('URL du fichier:', fileUrl);
-        console.log('URL du fichier:', fileUrl);  // Log pour vérifier l'URL du fichier
 
-    res.status(200).json({ fileUrl });
+    req.fileUrl = fileUrl; // Ajoutez l'URL du fichier à l'objet req pour la transmettre à la prochaine fonction
+    next(); // Passez le contrôle à la prochaine fonction middleware
   } catch (error) {
     console.error('Erreur lors de l\'upload du fichier:', error);
     res.status(500).json({ error: 'Erreur lors de l\'upload du fichier' });
   }
 };
+
 
 module.exports = {
   upload,
