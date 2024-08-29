@@ -6,7 +6,9 @@ import Case from "../assets/case";
 import Request from "../assets/requests";
 import Calendar from "../assets/calendar";
 import Logout from "../assets/logout";
-import axios from '../api/axios'; // Assurez-vous que ce chemin est correct
+import axios from '../api/axios'; 
+import ArticleIconCustom from '../assets/ArticleIcon.js'; 
+
 
 const AdminDashboard = () => {
   const navigate = useNavigate();
@@ -37,9 +39,13 @@ const AdminDashboard = () => {
       <div className="bg-[#9CD8ED] flex flex-col justify-between w-2/12 items-center p-4">
         <img src={fac_logo} alt="fac_logo" className="w-36 h-36" />
         <div>
-          <Link to="AdminDashboard" className="flex flex-row gap-1 text-lg items-center text-white">
+          <Link to="SharedDocuments" className="flex flex-row gap-1 text-lg items-center text-white">
             <Notif fillColor="white" width={32} height={32} />
             <p>Notifications</p>
+          </Link>
+          <Link to="UploadDocument" className="flex flex-row gap-1 text-lg items-center text-white">
+            <ArticleIconCustom fillColor="white" width={26} height={26} />
+            <p>Documents</p>
           </Link>
           <Link to="dashboardDataForAdmin" className="flex flex-row gap-1 text-lg items-center text-white">
             <Case fillColor="white" width={32} height={32} />
