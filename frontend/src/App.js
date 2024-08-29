@@ -294,11 +294,21 @@ const App = () => {
             <Route path="PersonalInfoForm" element={<PersonalInfoForm />} />
             <Route path="DemandeRetraitProvisoireForm" element={<DemandeRetraitProvisoireForm />} />
             <Route path="InscriptionForm" element={<InscriptionForm />} />
-            <Route path="DemandeTable" element={<DemandeTable />} />
+            
+            <Route path="DemandeTable" element={<DemandeTable />}>
+            <Route path="update-demande/:demandeId" element={<UpdateDemandeForm />} />
+            <Route path="DemandeForm" element={<DemandeForm />} />
+
+          </Route>
+
             <Route path="DossierSoutenanceForm" element={<DossierSoutenanceForm />} />
             <Route path="CalendarForDoctorant" element={<CalendarForDoctorant />} />
             <Route path="UploadDocument" element={<UploadDocument />} />
             <Route path="SharedDocuments" element={<SharedDocuments  />} />
+            <Route path="CalendarForAdmin" element={<CalendarForAdmin />} />
+
+          <Route path="DemandeForm" element={<DemandeForm />} />
+            
 
 
 
@@ -315,6 +325,10 @@ const App = () => {
             <Route path="DoctorantRequestsforAdmin" element={<DoctorantRequestsforAdmin />} />
             <Route path="RequestDetails" element={<RequestDetails />} />
             <Route path="dashboardDataForAdmin" element={<DashboardDataForAdmin />} />
+            <Route path="UploadDocument" element={<UploadDocument />} />
+            <Route path="SharedDocuments" element={<SharedDocuments  />} />
+
+
             
 
 
@@ -329,6 +343,9 @@ const App = () => {
             <Route path="Messagerie" element={<Messagerie />} />
             <Route path="UploadDocument" element={<UploadDocument />} />
             <Route path="SharedDocuments" element={<SharedDocuments  />} />
+            <Route path="CalendarForAdmin" element={<CalendarForAdmin />} />
+
+            
 
 
 

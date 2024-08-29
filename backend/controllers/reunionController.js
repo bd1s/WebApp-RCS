@@ -41,6 +41,62 @@ module.exports = {
       res.status(500).json({ error: error.message });
     }
   },
+  // createReunion: async (req, res) => {
+  //   try {
+  //     const { titre, description, date, heure_debut, heure_fin, doctorantsNoms } = req.body;
+  //     const id_utilisateur = req.user.userId; // Obtenez l'ID utilisateur depuis le token
+  
+  //     // Trouvez l'enseignant associé à cet utilisateur
+  //     const enseignant = await Enseignant.findOne({ where: { id_utilisateur } });
+  //     if (!enseignant) {
+  //       console.log('Enseignant non trouvé pour ID utilisateur:', id_utilisateur);
+  //       return res.status(404).json({ error: 'Enseignant non trouvé' });
+  //     }
+  //     const enseignantId = enseignant.id_enseignant;
+  //     console.log('Enseignant trouvé pour ID utilisateur:', enseignantId);
+  
+  //     // Créez la réunion
+  //     const reunion = await Reunion.create({ titre, description, date, heure_debut, heure_fin, id_enseignant: enseignantId });
+  
+  //     // Séparer les noms complets
+  //     const doctorantsNomsArray = doctorantsNoms.split('\n').map(name => name.trim()).filter(name => name); // Utiliser '\n' si les noms sont séparés par des retours à la ligne
+  
+  //     // Rechercher les doctorants par nom complet (nom et prénom)
+  //     const doctorantsIds = await Promise.all(doctorantsNomsArray.map(async (nomComplet) => {
+  //       // Séparer le nom complet en nom et prénom
+  //       const parts = nomComplet.split(' ');
+  //       const nom = parts.shift(); // Le premier élément est le nom
+  //       const prenom = parts.join(' '); // Le reste est le prénom
+        
+  //       // Rechercher le doctorant par nom et prénom
+  //       const doctorant = await Doctorant.findOne({
+  //         include: {
+  //           model: Utilisateur,
+  //           where: {
+  //             nom,
+  //             prenom
+  //           }
+  //         }
+  //       });
+  
+  //       return doctorant ? doctorant.id_doctorant : null;
+  //     }));
+  
+  //     // Nettoyez les IDs nulls
+  //     const validDoctorants = doctorantsIds.filter(id => id !== null);
+  
+  //     // Associez les doctorants à la réunion
+  //     if (validDoctorants.length > 0) {
+  //       console.log('Doctorants associés:', validDoctorants);
+  //       await reunion.setDoctorants(validDoctorants);
+  //     }
+  
+  //     res.status(201).json(reunion);
+  //   } catch (error) {
+  //     res.status(500).json({ error: error.message });
+  //   }
+  // },
+  
 
   getReunionById: async (req, res) => {
     try {

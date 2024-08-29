@@ -27,19 +27,16 @@ app.use(express.json());
 app.use('/api/auth', authRoutes);
 app.use('/api/doctorant', doctorantRoutes); 
 app.use('/api/demandes', demandesRoutes);
-app.use('/api/dossierSoutenance', dossierSoutenanceRoutes); // Décommentez cette ligne si vous avez besoin de la route dossierSoutenance
+app.use('/api/dossierSoutenance', dossierSoutenanceRoutes); 
 
-// Ajouter la nouvelle route pour les utilisateurs
 app.use('/api/user', userRoutes);
 app.use('/api/reunions', reunionRoutes);
 
-// Nouvelle route pour afficher les doctorants encadrés par un enseignant
 app.use('/api/encadrement', encadrementRoutes);
 app.use('/api/dashboard', dashboardRoutes);
 app.use('/api', eventRoutes);
 
 app.use('/api/admin', adminRoutes);
-// Route pour les documents (création, partage, téléchargement)
 app.use('/api', documentRoutes);
 
 app.use('/api', uploadRoutes);

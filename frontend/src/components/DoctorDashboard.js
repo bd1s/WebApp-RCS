@@ -112,7 +112,8 @@ import Case from "../assets/case";
 import Request from "../assets/requests";
 import Calendar from "../assets/calendar";
 import Logout from "../assets/logout";
-import axios from '../api/axios'; // Assurez-vous que ce chemin est correct
+import axios from '../api/axios';
+import ShareDocumentIcon from "../assets/ShareDocumentIcon";
 
 const DoctorDashboard = () => {
   const navigate = useNavigate();

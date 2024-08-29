@@ -1,5 +1,3 @@
-
-
 const { Utilisateur, Doctorant, Administrateur,Enseignant  } = require('../models');
 const bcrypt = require('bcrypt');
 const jwt = require('jsonwebtoken');
@@ -9,6 +7,9 @@ const { Op } = require('sequelize');
 const { sendConfirmationEmail, sendPasswordResetEmail } = require('../nodemailer'); 
 const sequelize = require('../config/database'); 
 
+
+
+//1.register
 const register = async (req, res) => {
   try {
     const { email, password, role, prenom, nom, tele, role_administratif, departement, departement_enseignement, specialisation } = req.body;
@@ -71,7 +72,7 @@ const register = async (req, res) => {
         throw new Error('Rôle non pris en charge');
     }
 
-    // Send confirmation email
+    //  confirmation email
     sendConfirmationEmail(email, activationCode);
 
     res.status(201).json({ msg: 'Utilisateur enregistré avec succès', user: newUser, profile: newProfile });
@@ -85,58 +86,15 @@ const register = async (req, res) => {
 
 
 
-// const register = async (req, res) => {
-//   try {
-//     const { email, password, role, prenom, nom, tele } = req.body;
 
-//     // Validate password length
-//     if (password.length < 8) {
-//       return res.status(400).json({ msg: 'Le mot de passe doit comporter au moins 8 caractères' });
-//     }
-
-//     // Hash the password before storing it in the database
-//     const hashedPassword = await bcrypt.hash(password, 10);
-
-//     // Generate activation code
-//     const characters = "0123456789abcdefghijklmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZ";
-//     let activationCode = "";
-//     for (let i = 0; i < 25; i++) {
-//       activationCode += characters[Math.floor(Math.random() * characters.length)];
-//     }
-
-//     // Debugging: log the hashed password and activation code
-//     console.log('Hashed password (registration):', hashedPassword);
-//     console.log('Activation code:', activationCode);
-
-//     // Create new user
-//     const newUser = await Utilisateur.create({
-//       email,
-//       mot_de_passe_hache: hashedPassword,
-//       role,
-//       prenom,
-//       nom,
-//       tele,
-//       isActive: false,
-//       activationCode,
-//     });
-
-//    // Send confirmation email
-//    sendConfirmationEmail(email, activationCode);
-
-//     res.status(201).json({ msg: 'Utilisateur enregistré avec succès', user: newUser });
-//   } catch (err) {
-//     console.error('Erreur lors de l\'enregistrement de l\'utilisateur :', err);
-//     res.status(500).json({ msg: 'Erreur du serveur', error: err.message });
-//   }
-// };
-
+//2.login
 const login = async (req, res) => {
   try {
     const { email, password } = req.body;
 
     console.log('Login attempt:', { email, password });
 
-    // Find user by email using Sequelize
+    // Find user by email
     const user = await Utilisateur.findOne({ where: { email } });
     if (!user) {
       console.log('User not found');
@@ -180,7 +138,7 @@ const login = async (req, res) => {
 
 
 
-
+//3.activer l'utilisateur avec le code
 const verifyUser = async (req, res) => {
   try {
     console.log("Requête reçue pour activer l'utilisateur avec le code :", req.params.activationcode);
@@ -193,7 +151,7 @@ const verifyUser = async (req, res) => {
     }
 
     console.log("Utilisateur trouvé :", user);
-    user.isActive = true; // Sequelize devrait gérer la conversion en 1 pour la base de données
+    user.isActive = true; 
     await user.save();
     console.log("Utilisateur mis à jour :", user);
 
@@ -211,67 +169,7 @@ const verifyUser = async (req, res) => {
 
 
 
-
-
-
-
-
-
-
-
-
-
-
-
-// const verifyUser = async (req, res) => {
-//   try {
-//     const user = await Utilisateur.findOne({ where: { activationCode: req.params.activationcode } });
-//     if (!user) {
-//       return res.status(400).send({
-//         message: "Code d'activation incorrect",
-//       });
-//     }
-
-//     user.isActive = true;
-//     await user.save();
-
-//     res.send({
-//       message: "Le compte a été activé avec succès",
-//     });
-//   } catch (err) {
-//     res.status(500).send({
-//       message: "Erreur du serveur",
-//       error: err.message,
-//     });
-//   }
-// };
-
-
-
-// const verifyUser = async (req, res) => {
-//   try {
-//     const user = await Utilisateur.findOne({ where: { activationCode: req.params.activationcode } });
-//     if (!user) {
-//       return res.status(400).send({
-//         message: "Code d'activation incorrect",
-//       });
-//     }
-
-//     user.isActive = true; // Sequelize devrait gérer la conversion en 1 pour la base de données
-//     await user.save();
-
-//     res.send({
-//       message: "Félicitations ! Votre compte a été activé avec succès.",
-//     });
-//   } catch (err) {
-//     res.status(500).send({
-//       message: "Erreur du serveur",
-//       error: err.message,
-//     });
-//   }
-// };
-
-
+//5.get All users
 const getAllUsers = async (req, res) => {
   try {
     const users = await Utilisateur.findAll();
@@ -284,7 +182,8 @@ const getAllUsers = async (req, res) => {
 
 
 
-// Fonction pour demander la réinitialisation du mot de passe
+
+//6.la requette pour la  réinitialisation du mot de passe
 const requestPasswordReset = async (req, res) => {
   const { email } = req.body;
 
@@ -314,40 +213,9 @@ const requestPasswordReset = async (req, res) => {
   }
 };
 
-// const resetPassword = async (req, res) => {
-//   const { token, password } = req.body;
 
-//   try {
-//     // Trouvez l'utilisateur avec le token donné et assurez-vous que le token n'a pas expiré
-//     const user = await Utilisateur.findOne({
-//       where: {
-//         resetPasswordToken: token,
-//         resetPasswordExpires: { [Op.gt]: Date.now() }, // Vérifiez si le token n'a pas expiré
-//       },
-//     });
 
-//     if (!user) {
-//       return res.status(400).json({ msg: 'Le token de réinitialisation est invalide ou a expiré' });
-//     }
-
-//     // Hash le nouveau mot de passe
-//     const hashedPassword = await bcrypt.hash(password, 10);
-
-//     // Mettre à jour l'utilisateur avec le nouveau mot de passe et réinitialiser les champs de token
-//     user.mot_de_passe_hache = hashedPassword;
-//     user.resetPasswordToken = null;
-//     user.resetPasswordExpires = null;
-
-//     await user.save();
-
-//     res.status(200).json({ msg: 'Votre mot de passe a été réinitialisé avec succès' });
-//   } catch (err) {
-//     console.error('Erreur lors de la réinitialisation du mot de passe :', err);
-//     res.status(500).json({ msg: 'Erreur du serveur', error: err.message });
-//   }
-// };
-
- // Assurez-vous du chemin correct
+//7. la  réinitialisation du mot de passe
 
  const resetPassword = async (req, res) => {
   const { token } = req.params;

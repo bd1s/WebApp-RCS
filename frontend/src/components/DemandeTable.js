@@ -187,7 +187,7 @@
 import React, { useEffect, useState } from 'react';
 import axios from '../api/axios'; // Utiliser l'instance Axios configurée
 import 'bootstrap/dist/css/bootstrap.min.css';
-import { useNavigate } from 'react-router-dom';
+import { useNavigate, Outlet } from 'react-router-dom';
 
 const DemandeTable = ({ doctorantId }) => {
   const [demandes, setDemandes] = useState([]);
@@ -211,7 +211,7 @@ const DemandeTable = ({ doctorantId }) => {
   }, [doctorantId]);
 
   const handleEditClick = (demandeId) => {
-    navigate(`/update-demande/${demandeId}`); // Rediriger vers la page de mise à jour
+    navigate(`update-demande/${demandeId}`); // Rediriger vers la page de mise à jour
   };
 
   if (loading) return <p>Chargement...</p>;
@@ -221,7 +221,7 @@ const DemandeTable = ({ doctorantId }) => {
     <div className="container mt-5">
       <div className="d-flex justify-content-between align-items-center mb-3">
         <h2>Mes demandes</h2>
-        <button onClick={() => navigate('/DemandeForm')} className="btn btn-primary">
+        <button onClick={() => navigate('DemandeForm')} className="btn btn-primary">
           Ajouter une demande
         </button>
       </div>
@@ -252,6 +252,8 @@ const DemandeTable = ({ doctorantId }) => {
           ))}
         </tbody>
       </table>
+      <Outlet />
+
     </div>
   );
 };
