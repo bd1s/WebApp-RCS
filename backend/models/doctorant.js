@@ -21,7 +21,10 @@ module.exports = (sequelize, DataTypes) => {
   }, {});
 
   Doctorant.associate = function(models) {
-    Doctorant.belongsTo(models.Utilisateur, { foreignKey: 'id_utilisateur' });
+    Doctorant.belongsTo(models.Utilisateur, { 
+      foreignKey: 'id_utilisateur',
+      as: 'utilisateur'  
+    });   
     Doctorant.hasMany(models.InfosPersonnelles, { foreignKey: 'id_doctorant' });
     Doctorant.hasMany(models.InfosBaccalaureats, { foreignKey: 'id_doctorant' });
     Doctorant.hasMany(models.InfosUniversitaires, { foreignKey: 'id_doctorant' });

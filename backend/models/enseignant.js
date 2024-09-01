@@ -17,7 +17,7 @@ module.exports = (sequelize, DataTypes) => {
       onUpdate: 'CASCADE',
       onDelete: 'CASCADE',
     },
-    departement_enseignement: { // Nom mis à jour ici
+    departement_enseignement: {
       type: DataTypes.STRING,
       allowNull: false,
     },
@@ -29,7 +29,7 @@ module.exports = (sequelize, DataTypes) => {
 
   Enseignant.associate = function(models) {
     // Association avec le modèle Utilisateur
-    Enseignant.belongsTo(models.Utilisateur, { foreignKey: 'id_utilisateur' });
+    Enseignant.belongsTo(models.Utilisateur, { foreignKey: 'id_utilisateur', as: 'utilisateur' });
     Enseignant.hasMany(models.Reunion, { foreignKey: 'id_enseignant' });
 
     // Association avec Doctorant via Encadrement

@@ -131,9 +131,15 @@
 // };
 
 
+
+
+
+
 /// controllers/documentController.js
 const { Op } = require('sequelize');
-const { Document, DocumentPartage, Utilisateur } = require('../models');
+const { Document, DocumentPartage, Utilisateur ,InfosCycleDoctoral} = require('../models');
+
+
 
 // Créer un document
 exports.createDocument = async (req, res) => {
@@ -160,28 +166,154 @@ exports.createDocument = async (req, res) => {
     }
 };
 
-// Partager un document
-exports.shareDocument = async (req, res) => {
+
+
+
+exports.getDoctorantsByDepartment = async (req, res) => {
     try {
-        const { id_document, nom_complet_recepteur } = req.body;
+        const { departement } = req.query;
 
-        // Chercher l'utilisateur recepteur par nom complet
-        const utilisateur = await Utilisateur.findOne({
-            where: {
-                [Op.and]: [
-                    { nom: nom_complet_recepteur.nom },
-                    { prenom: nom_complet_recepteur.prenom }
-                ]
-            }
-        });
-
-        if (!utilisateur) {
-            return res.status(404).json({ error: 'Utilisateur recepteur non trouvé' });
+        if (!departement) {
+            return res.status(400).json({ error: 'Département manquant' });
         }
 
+        // Récupérer les doctorants associés au département
+        const doctorants = await Doctorant.findAll({
+            include: [{
+                model: InfosCycleDoctoral,
+                attributes: ['departement_doctorant'],
+                where: { specialite: departement }
+            }, {
+                model: Utilisateur,
+                as: 'utilisateur',
+                attributes: ['id_utilisateur', 'prenom', 'nom']
+            }]
+        });
+
+        // Mapper les résultats pour ne retourner que les informations nécessaires
+        const doctorantList = doctorants.map(doctorant => ({
+            id: doctorant.utilisateur.id_utilisateur,
+            prenom: doctorant.utilisateur.prenom,
+            nom: doctorant.utilisateur.nom,
+            specialite: doctorant.infosCycleDoctoral.specialite
+        }));
+
+        res.status(200).json(doctorantList);
+    } catch (error) {
+        console.error('Erreur lors de la récupération des doctorants par département:', error);
+        res.status(500).json({ error: 'Erreur lors de la récupération des doctorants' });
+    }
+};
+
+
+
+
+// Récupérer les utilisateurs par rôle
+const { Doctorant, Administrateur, Enseignant } = require('../models');
+exports.getDepartments = async (req, res) => {
+    try {
+        const departments = await Enseignant.findAll({
+            attributes: ['departement_enseignement'],
+            group: ['departement_enseignement']
+        });
+        res.status(200).json(departments.map(department => department.departement_enseignement));
+    } catch (error) {
+        console.error('Erreur lors de la récupération des départements:', error);
+        res.status(500).json({ error: 'Erreur lors de la récupération des départements' });
+    }
+};
+
+
+
+
+// Récupérer les utilisateurs par rôle
+exports.getUsersByRole = async (req, res) => {
+    try {
+        const { role, departement } = req.query; 
+
+        let users;
+        switch(role) {
+            case 'doctorant':
+                users = await Doctorant.findAll({
+                    include: [{
+                        model: Utilisateur,
+                        as: 'utilisateur',
+                        attributes: ['id_utilisateur', 'prenom', 'nom']
+                    }]
+                });
+                break;
+            case 'administrateur':
+                users = await Administrateur.findAll({
+                    include: [{
+                        model: Utilisateur,
+                        as: 'utilisateur',
+                        attributes: ['id_utilisateur', 'prenom', 'nom']
+                    }]
+                });
+                break;
+                case 'enseignant':
+                    const whereClause = departement ? { departement_enseignement: departement } : {};
+                    users = await Enseignant.findAll({
+                        where: whereClause,
+                        include: [{
+                            model: Utilisateur,
+                            as: 'utilisateur',
+                            attributes: ['id_utilisateur', 'prenom', 'nom']
+                        }]
+                    });
+                break;
+            default:
+                return res.status(400).json({ error: 'Rôle invalide' });
+        }
+
+        // Mapper les résultats pour ne retourner que les informations nécessaires
+        const userList = users.map(user => ({
+            id: user.utilisateur.id_utilisateur,
+            prenom: user.utilisateur.prenom,
+            nom: user.utilisateur.nom
+        }));
+
+        res.status(200).json(userList);
+    } catch (error) {
+        console.error('Erreur lors de la récupération des utilisateurs par rôle:', error);
+        res.status(500).json({ error: 'Erreur lors de la récupération des utilisateurs' });
+    }
+};
+
+
+
+
+
+// Partager un document
+exports.getDoctorantDepartments = async (req, res) => {
+    try {
+        const departments = await InfosCycleDoctoral.findAll({
+            attributes: ['departement_doctorant'], 
+            group: ['departement_doctorant']
+        });
+        res.status(200).json(departments.map(dept => dept.structure_recherche_directeur));
+    } catch (error) {
+        console.error('Erreur lors de la récupération des départements des doctorants:', error);
+        res.status(500).json({ error: 'Erreur lors de la récupération des départements des doctorants' });
+    }
+};
+
+
+
+
+exports.shareDocument = async (req, res) => {
+    try {
+        const { id_document, id_utilisateur_recepteur } = req.body;
+
+        // Vérifier que l'id du récepteur est bien fourni
+        if (!id_utilisateur_recepteur) {
+            return res.status(400).json({ error: 'ID du récepteur manquant' });
+        }
+
+        // Créer l'enregistrement du partage de document
         const partage = await DocumentPartage.create({
             id_document,
-            id_utilisateur_recepteur: utilisateur.id_utilisateur,
+            id_utilisateur_recepteur,
         });
 
         console.log('Document partagé:', partage);
@@ -192,6 +324,7 @@ exports.shareDocument = async (req, res) => {
         res.status(500).json({ error: 'Erreur lors du partage du document' });
     }
 };
+
 
 
 

@@ -1,4 +1,4 @@
-const { Reunion, Doctorant, Enseignant, ReunionDoctorants } = require('../models');
+const { Reunion, Doctorant, Enseignant, ReunionDoctorants,InfosCycleDoctorals  } = require('../models');
 
 module.exports = {
   getAllReunions: async (req, res) => {
@@ -7,6 +7,51 @@ module.exports = {
         include: [Enseignant, Doctorant]
       });
       res.json(reunions);
+    } catch (error) {
+      res.status(500).json({ error: error.message });
+    }
+  },
+
+  getDepartementsDoctorants: async (req, res) => {
+    try {
+      const departements = await InfosCycleDoctorals.findAll({
+        attributes: [[sequelize.fn('DISTINCT', sequelize.col('departement_doctorant')), 'departement_doctorant']],
+        where: {
+          departement_doctorant: {
+            [sequelize.Op.ne]: null
+          }
+        }
+      });
+  
+      console.log('Departements:', departements); // Ajouter un log pour vérifier les données
+      res.json(departements.map(dep => dep.departement_doctorant));
+    } catch (error) {
+      console.error('Error fetching departments:', error); // Ajouter un log pour les erreurs
+      res.status(500).json({ error: error.message });
+    }
+  },
+  
+
+  getDoctorantsByDepartement: async (req, res) => {
+    try {
+      const { departement } = req.params;
+
+      const doctorants = await Doctorant.findAll({
+        include: [{
+          model: InfosCycleDoctorals,
+          where: { departement_doctorant: departement },
+          include: [{
+            model: Utilisateur,
+            attributes: ['nom', 'prenom']
+          }]
+        }]
+      });
+
+      if (!doctorants || doctorants.length === 0) {
+        return res.status(404).json({ error: 'Aucun doctorant trouvé pour ce département' });
+      }
+
+      res.json(doctorants);
     } catch (error) {
       res.status(500).json({ error: error.message });
     }

@@ -11,5 +11,9 @@ router.post('/documents/share', verifyToken, documentController.shareDocument);
 router.get('/documents/shared', verifyToken, documentController.getSharedDocuments);
 
 router.get('/documents/:id_document/download', verifyToken, documentController.downloadDocument);
+router.get('/usersByRole', documentController.getUsersByRole);
+router.get('/departments', documentController.getDepartments);
+router.get('/doctorantsByDepartment', documentController.getDoctorantsByDepartment);
+
 
 module.exports = router;
