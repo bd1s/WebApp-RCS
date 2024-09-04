@@ -136,26 +136,46 @@
 
 
 /// controllers/documentController.js
+
+const fs = require('fs');
+const path = require('path');
 const { Op } = require('sequelize');
-const { Document, DocumentPartage, Utilisateur ,InfosCycleDoctoral} = require('../models');
+const { Document, DocumentPartage, Utilisateur ,InfosCycleDoctorals} = require('../models');
 
 
 
-// Créer un document
+
 exports.createDocument = async (req, res) => {
     try {
-        const userId = req.user.userId; 
-        console.log('userId:', userId); 
+        console.log('Données reçues du frontend:');
+        console.log('Body:', req.body);
+        console.log('Fichier:', req.file);
 
-        const { titre, fichier_url } = req.body; // Récupérer l'URL du fichier depuis le frontend
-        const id_utilisateur = userId; // ID de l'utilisateur connecté
+        const userId = req.user ? req.user.userId : null; // Assurez-vous que userId est bien défini
+        if (!userId) {
+            return res.status(400).json({ error: 'User ID not found. Please ensure you are logged in.' });
+        }        const { titre } = req.body; // Le titre du document
+        const id_utilisateur = userId;
+        let fichier_lien = null;
 
-        console.log('Titre:', titre);
-        console.log('ID Utilisateur:', id_utilisateur);
-        console.log('URL Fichier:', fichier_url);
+        if (req.file) {
+            // Déterminer le chemin de destination pour le fichier
+            const destinationPath = path.join(__dirname, '../uploads/documents', req.file.filename);
 
-        // Création d'un nouvel enregistrement de document avec l'URL du fichier
-        const newDocument = await Document.create({ titre, fichier_url, id_utilisateur });
+            // Déplacer le fichier du répertoire temporaire vers le répertoire permanent
+            fs.renameSync(req.file.path, destinationPath);
+
+            // Générer un lien relatif vers le fichier
+            fichier_lien = `/uploads/documents/${req.file.filename}`;
+            console.log('Fichier de document enregistré:', fichier_lien);
+        }
+
+        // Création d'un nouvel enregistrement de document avec le lien vers le fichier
+        const newDocument = await Document.create({
+            titre,
+            fichier_url: fichier_lien, // Stocker le lien du fichier
+            id_utilisateur
+        });
 
         console.log('Document créé:', newDocument);
 
@@ -169,44 +189,83 @@ exports.createDocument = async (req, res) => {
 
 
 
-exports.getDoctorantsByDepartment = async (req, res) => {
-    try {
-        const { departement } = req.query;
 
-        if (!departement) {
-            return res.status(400).json({ error: 'Département manquant' });
-        }
+// exports.getDoctorantsByDepartment = async (req, res) => {
+//     try {
+//         const { departement } = req.query;
 
-        // Récupérer les doctorants associés au département
-        const doctorants = await Doctorant.findAll({
-            include: [{
-                model: InfosCycleDoctoral,
-                attributes: ['departement_doctorant'],
-                where: { specialite: departement }
-            }, {
-                model: Utilisateur,
-                as: 'utilisateur',
-                attributes: ['id_utilisateur', 'prenom', 'nom']
-            }]
-        });
+//         if (!departement) {
+//             return res.status(400).json({ error: 'Département manquant' });
+//         }
 
-        // Mapper les résultats pour ne retourner que les informations nécessaires
-        const doctorantList = doctorants.map(doctorant => ({
-            id: doctorant.utilisateur.id_utilisateur,
-            prenom: doctorant.utilisateur.prenom,
-            nom: doctorant.utilisateur.nom,
-            specialite: doctorant.infosCycleDoctoral.specialite
-        }));
+//         // Récupérer les doctorants associés au département
+//         const doctorants = await Doctorant.findAll({
+//             include: [{
+//                 model: InfosCycleDoctoral,
+//                 attributes: ['departement_doctorant'],
+//                 where: { specialite: departement }
+//             }, {
+//                 model: Utilisateur,
+//                 as: 'utilisateur',
+//                 attributes: ['id_utilisateur', 'prenom', 'nom']
+//             }]
+//         });
 
-        res.status(200).json(doctorantList);
-    } catch (error) {
-        console.error('Erreur lors de la récupération des doctorants par département:', error);
-        res.status(500).json({ error: 'Erreur lors de la récupération des doctorants' });
-    }
+//         // Mapper les résultats pour ne retourner que les informations nécessaires
+//         const doctorantList = doctorants.map(doctorant => ({
+//             id: doctorant.utilisateur.id_utilisateur,
+//             prenom: doctorant.utilisateur.prenom,
+//             nom: doctorant.utilisateur.nom,
+//             specialite: doctorant.infosCycleDoctoral.specialite
+//         }));
+
+//         res.status(200).json(doctorantList);
+//     } catch (error) {
+//         console.error('Erreur lors de la récupération des doctorants par département:', error);
+//         res.status(500).json({ error: 'Erreur lors de la récupération des doctorants' });
+//     }
+// };
+
+//
+exports.getDoctorantsByDepartement = async (req, res) => {
+  const departement = req.params.departement;
+
+  try {
+    const doctorants = await Utilisateur.findAll({
+      attributes: ['id_utilisateur', 'nom', 'prenom'],
+      include: [{
+        model: Doctorant,
+        as: 'Doctorant',
+        include: [{
+          model: InfosCycleDoctorals,
+          as: 'InfosCycleDoctorals',
+          where: {
+            departement_doctorant: departement
+          },
+          attributes: [] // Exclude fields of InfosCycleDoctorals from final result
+        }],
+        attributes: ['id_doctorant'] // Include id_doctorant here
+      }],
+      where: {
+        '$Doctorant.InfosCycleDoctorals.departement_doctorant$': departement
+      }
+    });
+
+    // Map the doctorants to include id_doctorant
+    res.json(doctorants.map(doctorant => ({
+      id: doctorant.Doctorant.id_doctorant, // Include id_doctorant
+      nom: doctorant.nom,
+      prenom: doctorant.prenom
+    })));
+  } catch (error) {
+    console.error("Error fetching doctorants by departement:", error);
+    res.status(500).json({ error: error.message });
+  }
 };
-
-
-
+//
+  
+  
+  
 
 // Récupérer les utilisateurs par rôle
 const { Doctorant, Administrateur, Enseignant } = require('../models');
@@ -339,11 +398,11 @@ exports.getSharedDocuments = async (req, res) => {
             include: [
                 {
                     model: Document,
-                    as: 'document', // Utiliser l'alias 'document'
+                    as: 'document', 
                     include: [
                         {
                             model: Utilisateur,
-                            as: 'utilisateur', // Utiliser l'alias 'utilisateur'
+                            as: 'utilisateur', 
                             attributes: ['prenom', 'nom', 'email']
                         }
                     ]
@@ -351,7 +410,6 @@ exports.getSharedDocuments = async (req, res) => {
             ]
         });
 
-        // Extraire et structurer les informations des documents
         const sharedDocuments = documents.map(docPartage => {
             const { id_document, titre, fichier_url, createdAt } = docPartage.document;
             const { prenom, nom, email } = docPartage.document.utilisateur;

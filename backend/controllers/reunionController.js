@@ -1,4 +1,5 @@
-const { Reunion, Doctorant, Enseignant, ReunionDoctorants,InfosCycleDoctorals  } = require('../models');
+const { Utilisateur,Reunion, Doctorant, Enseignant,InfosCycleDoctorals } = require('../models');
+const { Op, fn, col } = require('sequelize');
 
 module.exports = {
   getAllReunions: async (req, res) => {
@@ -12,51 +13,69 @@ module.exports = {
     }
   },
 
-  getDepartementsDoctorants: async (req, res) => {
+   getDepartementsDoctorants :async (req, res) => {
     try {
+      console.log('Fetching departments...');
       const departements = await InfosCycleDoctorals.findAll({
-        attributes: [[sequelize.fn('DISTINCT', sequelize.col('departement_doctorant')), 'departement_doctorant']],
+        attributes: [[fn('DISTINCT', col('departement_doctorant')), 'departement_doctorant']],
         where: {
           departement_doctorant: {
-            [sequelize.Op.ne]: null
+            [Op.ne]: null
           }
         }
       });
-  
-      console.log('Departements:', departements); // Ajouter un log pour vérifier les données
+      console.log('Departements:', departements);
       res.json(departements.map(dep => dep.departement_doctorant));
     } catch (error) {
-      console.error('Error fetching departments:', error); // Ajouter un log pour les erreurs
+      console.error('Error fetching departments:', error);
       res.status(500).json({ error: error.message });
     }
   },
   
 
-  getDoctorantsByDepartement: async (req, res) => {
-    try {
-      const { departement } = req.params;
 
-      const doctorants = await Doctorant.findAll({
+  
+  // Route handler for getting doctorants by department
+ getDoctorantsByDepartement : async (req, res) => {
+  const departement = req.params.departement;
+
+  try {
+    const doctorants = await Utilisateur.findAll({
+      attributes: ['id_utilisateur', 'nom', 'prenom'],
+      include: [{
+        model: Doctorant,
+        as: 'Doctorant',
         include: [{
           model: InfosCycleDoctorals,
-          where: { departement_doctorant: departement },
-          include: [{
-            model: Utilisateur,
-            attributes: ['nom', 'prenom']
-          }]
-        }]
-      });
-
-      if (!doctorants || doctorants.length === 0) {
-        return res.status(404).json({ error: 'Aucun doctorant trouvé pour ce département' });
+          as: 'InfosCycleDoctorals',
+          where: {
+            departement_doctorant: departement
+          },
+          attributes: [] // Exclude fields of InfosCycleDoctorals from final result
+        }],
+        attributes: ['id_doctorant'] // Include id_doctorant here
+      }],
+      where: {
+        '$Doctorant.InfosCycleDoctorals.departement_doctorant$': departement
       }
+    });
 
-      res.json(doctorants);
-    } catch (error) {
-      res.status(500).json({ error: error.message });
-    }
-  },
+    // Map the doctorants to include id_doctorant
+    res.json(doctorants.map(doctorant => ({
+      id: doctorant.Doctorant.id_doctorant, // Include id_doctorant
+      nom: doctorant.nom,
+      prenom: doctorant.prenom
+    })));
+  } catch (error) {
+    console.error("Error fetching doctorants by departement:", error);
+    res.status(500).json({ error: error.message });
+  }
+},
 
+  
+  
+  
+  
   createReunion: async (req, res) => {
     try {
       const { titre, description, date, heure_debut, heure_fin, doctorants } = req.body;
@@ -150,7 +169,7 @@ module.exports = {
         include: [Enseignant, Doctorant]
       });
       if (!reunion) {
-        console.log('Réunion non trouvée pour ID:', id); // Log si la réunion n'est pas trouvée
+        console.log('Réunion non trouvée pour ID dans getReunionById:', id); // Log si la réunion n'est pas trouvée
         return res.status(404).json({ error: 'Réunion non trouvée' });
       }
       res.json(reunion);
@@ -166,7 +185,7 @@ module.exports = {
 
       const reunion = await Reunion.findByPk(id);
       if (!reunion) {
-        console.log('Réunion non trouvée pour ID:', id); // Log si la réunion n'est pas trouvée
+        console.log('Réunion non trouvée pour ID updateReunion:', id); // Log si la réunion n'est pas trouvée
         return res.status(404).json({ error: 'Réunion non trouvée' });
       }
 
@@ -190,7 +209,7 @@ module.exports = {
       const { id } = req.params;
       const reunion = await Reunion.findByPk(id);
       if (!reunion) {
-        console.log('Réunion non trouvée pour ID:', id); // Log si la réunion n'est pas trouvée
+        console.log('Réunion non trouvée pour ID   deleteReunion:', id); // Log si la réunion n'est pas trouvée
         return res.status(404).json({ error: 'Réunion non trouvée' });
       }
 
