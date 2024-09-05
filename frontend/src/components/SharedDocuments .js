@@ -426,7 +426,6 @@
 // };
 
 // export default SharedDocuments;
-
 import React, { useEffect, useState } from 'react';
 import axios from '../api/axios';
 
@@ -436,14 +435,20 @@ const SharedDocuments = () => {
     const [error, setError] = useState(null);
     const [searchDate, setSearchDate] = useState('');
     const [searchName, setSearchName] = useState('');
-    const [view, setView] = useState('list'); // 'list' or 'timeline'
+    const [view, setView] = useState('list'); 
 
     useEffect(() => {
         const fetchDocuments = async () => {
             try {
-                const response = await axios.get('/documents/shared');
+                const token = localStorage.getItem('token');
+                const response = await axios.get('/documents/shared', {
+                    headers: {
+                        'Authorization': `Bearer ${token}`
+                    }
+                });                
                 setDocuments(response.data);
                 setLoading(false);
+                console.log('Documents partagés:', response.data);
             } catch (err) {
                 console.error('Erreur lors de la récupération des documents partagés:', err);
                 setError('Erreur lors de la récupération des documents partagés.');
@@ -454,11 +459,23 @@ const SharedDocuments = () => {
         fetchDocuments();
     }, []);
 
-    const downloadDocument = (url, titre) => {
+    const downloadDocument = async (id_document, titre) => {
+        console.log('ID du document:', id_document);
         try {
+            const token = localStorage.getItem('token');
+            const response = await axios({
+                url: `/documents/${id_document}/download`,
+                method: 'GET',
+                responseType: 'blob',
+                headers: {
+                    'Authorization': `Bearer ${token}`
+                }
+            });
+    
+            const url = window.URL.createObjectURL(new Blob([response.data], { type: 'application/pdf' }));
             const link = document.createElement('a');
             link.href = url;
-            link.setAttribute('download', titre);
+            link.setAttribute('download', `${titre}.pdf`);
             document.body.appendChild(link);
             link.click();
             document.body.removeChild(link);
@@ -469,15 +486,21 @@ const SharedDocuments = () => {
     };
 
     const filteredDocuments = documents.filter(doc => {
-        const docDate = new Date(doc.createdAt).toISOString().split('T')[0];
+        const docDate = new Date(doc.createdAt);
+        const formattedDocDate = docDate.toISOString().split('T')[0];
         const fullName = `${doc.prenom} ${doc.nom}`.toLowerCase();
         
         return (
-            (searchDate ? docDate === searchDate : true) &&
+            (searchDate ? formattedDocDate === searchDate : true) &&
             (searchName ? fullName.includes(searchName.toLowerCase()) : true)
         );
     });
-    
+
+const formatDate = (dateString) => {
+    const date = new Date(dateString);
+    return date.toLocaleDateString('fr-FR'); // Formatage en 'DD/MM/YYYY'
+};
+
 
     const getWeekNumber = (date) => {
         const start = new Date(date.getFullYear(), 0, 1);
@@ -555,9 +578,9 @@ const SharedDocuments = () => {
                         <li key={doc.id_document} className="p-4 border border-gray-200 rounded-md shadow-sm">
                             <p className="text-lg font-semibold">{doc.titre}</p>
                             <p className="text-gray-700">Partagé par: {doc.prenom} {doc.nom} ({doc.email})</p>
-                            <p className="text-gray-500">Date de partage: {new Date(doc.createdAt).toLocaleDateString('fr-FR')}</p>
+                            <p className="text-gray-500">Date de partage: {formatDate(doc.createdAt)}</p>
                             <button 
-                                onClick={() => downloadDocument(doc.fichier_url, doc.titre)} 
+                                onClick={() => downloadDocument(doc.id_document, doc.titre)} 
                                 className="mt-2 bg-blue-500 text-white p-2 rounded-md hover:bg-blue-600 transition"
                             >
                                 Télécharger
@@ -580,9 +603,9 @@ const SharedDocuments = () => {
                                     <li key={doc.id_document} className="p-4 border border-gray-200 rounded-md shadow-sm">
                                         <p className="text-lg font-semibold">{doc.titre}</p>
                                         <p className="text-gray-700">Partagé par: {doc.prenom} {doc.nom} ({doc.email})</p>
-                                        <p className="text-gray-500">Date de partage: {new Date(doc.createdAt).toLocaleDateString('fr-FR')}</p>
+                                        <p className="text-gray-500">Date de partage: {formatDate(doc.createdAt)}</p>
                                         <button 
-                                            onClick={() => downloadDocument(doc.fichier_url, doc.titre)} 
+                                            onClick={() => downloadDocument(doc.id_document, doc.titre)} 
                                             className="mt-2 bg-blue-500 text-white p-2 rounded-md hover:bg-blue-600 transition"
                                         >
                                             Télécharger
@@ -599,3 +622,4 @@ const SharedDocuments = () => {
 };
 
 export default SharedDocuments;
+

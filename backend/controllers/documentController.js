@@ -444,9 +444,20 @@ exports.downloadDocument = async (req, res) => {
             return res.status(404).json({ error: 'Document non trouvé' });
         }
 
-        // Rediriger vers l'URL du fichier pour téléchargement
-        res.redirect(document.fichier_url);
+        const filePath = path.join(__dirname, '../uploads/documents', document.fichier_url.replace('/uploads/documents/', ''));
+        
+        if (fs.existsSync(filePath)) {
+            res.download(filePath, (err) => {
+                if (err) {
+                    console.error('Erreur lors du téléchargement du fichier:', err);
+                    res.status(500).json({ error: 'Erreur lors du téléchargement du fichier' });
+                }
+            });
+        } else {
+            res.status(404).json({ error: 'Fichier non trouvé' });
+        }
     } catch (error) {
+        console.error('Erreur lors du téléchargement du document:', error);
         res.status(500).json({ error: 'Erreur lors du téléchargement du document' });
     }
 };
