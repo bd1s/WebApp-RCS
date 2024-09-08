@@ -14,6 +14,7 @@ async function getDoctorantsEncadres(req, res) {
       where: { id_utilisateur: userId },
       include: [{
         model: Utilisateur,
+        as: 'utilisateur',
         attributes: ['nom', 'prenom'],
       }]
     });
@@ -23,7 +24,7 @@ async function getDoctorantsEncadres(req, res) {
     }
 
     // Nom complet de l'enseignant
-    const nomCompletEnseignant = `${enseignant.Utilisateur.nom} ${enseignant.Utilisateur.prenom}`;
+    const nomCompletEnseignant = `${enseignant.utilisateur.nom} ${enseignant.utilisateur.prenom}`;
 
     // Trouver tous les doctorants encadrés par cet enseignant
     const doctorants = await InfosCycleDoctorals.findAll({
@@ -37,6 +38,7 @@ async function getDoctorantsEncadres(req, res) {
           model: Doctorant,
           include: [{
             model: Utilisateur,
+            as: 'utilisateur',
             attributes: ['nom', 'prenom'],
           }]
         }
@@ -49,7 +51,7 @@ async function getDoctorantsEncadres(req, res) {
 
     // Préparer les données pour la réponse
     const response = doctorants.map(info => ({
-      nomDoctorant: `${info.Doctorant.Utilisateur.nom} ${info.Doctorant.Utilisateur.prenom}`,
+      nomDoctorant: `${info.Doctorant.utilisateur.nom} ${info.Doctorant.utilisateur.prenom}`,
       sujetRecherche: info.sujet_recherche,
     }));
 

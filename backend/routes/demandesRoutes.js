@@ -63,6 +63,8 @@ const demandeController = require('../controllers/demandeController');
 
 const verifyToken = require('../middleware/verifyToken');
 const upload = require('../middleware/upload');
+// const { upload, uploadFile } = require('../controllers/uploadDemandeController');
+
 
 
 //  Récupération des demandes
@@ -88,7 +90,9 @@ router.post('/tirage', verifyToken, upload.single('fichier_demande_tirage'), dem
 
 
 // Mise à jour des demandes (routes PUT)
-router.put('/inscription/:id_demande', verifyToken, upload.single('fichier_demande'), demandeController.updateDemande);
+// router.put('/:id_demande', verifyToken, upload.single('file'), uploadFile, demandeController.updateDemande);
+
+router.put('/inscription/:id_demande', verifyToken, upload.single('file'), demandeController.updateDemande);
 router.put('/retrait-provisoire/:id_demande', verifyToken, upload.single('fichier_demande_retrait'), demandeController.updateDemande);
 router.put('/retrait-definitif/:id_demande', verifyToken, upload.single('fichier_retrait_definitif'), demandeController.updateDemande);
 router.put('/carte-etudiant/:id_demande', verifyToken, upload.single('fichier_carte_etudiant'), demandeController.updateDemande);

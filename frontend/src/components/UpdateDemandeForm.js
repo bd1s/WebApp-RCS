@@ -507,7 +507,6 @@
 // };
 
 // export default UpdateDemandeForm;        
-
 import React, { useState, useEffect } from 'react';
 import axios from '../api/axios'; // Utiliser l'instance Axios configurée
 import { useParams } from 'react-router-dom';
@@ -523,7 +522,6 @@ const UpdateDemandeForm = () => {
     const fetchDemande = async () => {
       try {
         const response = await axios.get(`/demandes/${demandeId}`);
-        console.log('Réponse de l\'API :', response);
         const { data } = response;
         setDemandeData(data);
         setLoading(false);
@@ -565,19 +563,12 @@ const UpdateDemandeForm = () => {
     // Ajouter des métadonnées supplémentaires si nécessaire
     formDataToSend.append('date_soumission', new Date().toISOString().split('T')[0]);
 
-    // Afficher les données envoyées pour le débogage
-    console.log('Données envoyées :');
-    for (const pair of formDataToSend.entries()) {
-      console.log(`${pair[0]}: ${pair[1]}`);
-    }
-
     try {
-      const response = await axios.put(`/demandes/${demandeId}`, formDataToSend, {
+      const response = await axios.put(`/demandes/inscription/${demandeId}`, formDataToSend, {
         headers: {
           'Content-Type': 'multipart/form-data',
         },
       });
-      console.log('Réponse de la mise à jour :', response);
       setMessage(response.data.message);
     } catch (error) {
       console.error('Erreur lors de la mise à jour de la demande:', error);
@@ -588,45 +579,40 @@ const UpdateDemandeForm = () => {
   if (loading) return <p>Loading...</p>;
 
   return (
-<div className="max-w-2xl mx-auto p-6 bg-white shadow-lg rounded-lg">
-    <h2 className="text-2xl font-semibold mb-4 text-center text-gray-800">Modifier la Demande</h2>
-    <p className="text-lg mb-4 text-gray-600">ID de la Demande: {demandeId}</p>
-    <form onSubmit={handleSubmit} className="space-y-6">
-      {demandeData.type_demande === 'inscription' && (
-        <>
-          <label className="block text-gray-700">Diplômes Précédents</label>
-          <input
-            type="text"
-            name="diplomes_precedents"
-            value={demandeData.diplomes_precedents || ''}
-            onChange={handleChange}
-            className="w-full p-2 border border-gray-300 rounded"
-          />
-          <label className="block text-gray-700">Spécialisation Souhaitée</label>
-          <input
-            type="text"
-            name="specialisation_souhaitee"
-            value={demandeData.specialisation_souhaitee || ''}
-            onChange={handleChange}
-            className="w-full p-2 border border-gray-300 rounded"
-          />
-          <label className="block text-gray-700">Notes de Transcription</label>
-          <input
-            type="text"
-            name="notes_transcription"
-            value={demandeData.notes_transcription || ''}
-            onChange={handleChange}
-            className="w-full p-2 border border-gray-300 rounded"
-          />
-          <label className="block text-gray-700">Fichier de Demande</label>
-          <input
-            type="file"
-            name="file"
-            onChange={handleFileChange}
-            className="w-full p-2 border border-gray-300 rounded"
-          />
-        </>
-      )}
+    <div className="max-w-2xl mx-auto p-6 bg-white shadow-lg rounded-lg">
+      <h2 className="text-2xl font-semibold mb-4 text-center text-gray-800">Modifier la Demande</h2>
+      <p className="text-lg mb-4 text-gray-600">ID de la Demande: {demandeId}</p>
+      <form onSubmit={handleSubmit} className="space-y-6">
+        {demandeData.type_demande === 'inscription' && (
+          <>
+            <label className="block text-gray-700">Diplômes Précédents</label>
+            <input
+              type="text"
+              name="diplomes_precedents"
+              value={demandeData.diplomes_precedents || ''}
+              onChange={handleChange}
+              className="w-full p-2 border border-gray-300 rounded"
+            />
+            <label className="block text-gray-700">Spécialisation Souhaitée</label>
+            <input
+              type="text"
+              name="specialisation_souhaitee"
+              value={demandeData.specialisation_souhaitee || ''}
+              onChange={handleChange}
+              className="w-full p-2 border border-gray-300 rounded"
+            />
+            <label className="block text-gray-700">Notes de Transcription</label>
+            <input
+              type="text"
+              name="notes_transcription"
+              value={demandeData.notes_transcription || ''}
+              onChange={handleChange}
+              className="w-full p-2 border border-gray-300 rounded"
+            />
+            <label className="block text-gray-700">Fichier de Demande</label>
+            <input type="file" name="file" accept=".pdf" onChange={handleFileChange} className="input-field" />
+          </>
+        )}
       {demandeData.type_demande === 'retrait-provisoire' && (
         <>
           <label className="block text-gray-700">Motif de Retrait</label>

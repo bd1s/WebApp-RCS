@@ -139,7 +139,7 @@
 
 const fs = require('fs');
 const path = require('path');
-const { Op } = require('sequelize');
+const { Op,Sequelize } = require('sequelize');
 const { Document, DocumentPartage, Utilisateur ,InfosCycleDoctorals} = require('../models');
 
 
@@ -226,48 +226,52 @@ exports.createDocument = async (req, res) => {
 //     }
 // };
 
-//
+//recuperer les doctorants appartenat au departement selectionne 
+
+
 exports.getDoctorantsByDepartement = async (req, res) => {
-  const departement = req.params.departement;
+    const departement = req.query.departement; // Lire le paramètre depuis req.query
+    console.log('Département reçu du frontend:', departement);
 
-  try {
-    const doctorants = await Utilisateur.findAll({
-      attributes: ['id_utilisateur', 'nom', 'prenom'],
-      include: [{
-        model: Doctorant,
-        as: 'Doctorant',
-        include: [{
-          model: InfosCycleDoctorals,
-          as: 'InfosCycleDoctorals',
-          where: {
-            departement_doctorant: departement
-          },
-          attributes: [] // Exclude fields of InfosCycleDoctorals from final result
-        }],
-        attributes: ['id_doctorant'] // Include id_doctorant here
-      }],
-      where: {
-        '$Doctorant.InfosCycleDoctorals.departement_doctorant$': departement
-      }
-    });
+    try {
+        const doctorants = await Utilisateur.findAll({
+            attributes: ['id_utilisateur', 'nom', 'prenom'],
+            include: [{
+                model: Doctorant,
+                as: 'Doctorant',
+                include: [{
+                    model: InfosCycleDoctorals,
+                    as: 'InfosCycleDoctorals',
+                    where: {
+                        departement_doctorant: departement
+                    },
+                    attributes: [] // Exclure les champs de InfosCycleDoctorals du résultat final
+                }],
+                attributes: ['id_doctorant'] // Inclure id_doctorant ici
+            }],
+            where: {
+                '$Doctorant.InfosCycleDoctorals.departement_doctorant$': departement
+            }
+        });
 
-    // Map the doctorants to include id_doctorant
-    res.json(doctorants.map(doctorant => ({
-      id: doctorant.Doctorant.id_doctorant, // Include id_doctorant
-      nom: doctorant.nom,
-      prenom: doctorant.prenom
-    })));
-  } catch (error) {
-    console.error("Error fetching doctorants by departement:", error);
-    res.status(500).json({ error: error.message });
-  }
+        // Mapper les doctorants pour inclure id_doctorant
+        res.json(doctorants.map(doctorant => ({
+            id: doctorant.id_utilisateur,
+            nom: doctorant.nom,
+            prenom: doctorant.prenom
+        })));
+    } catch (error) {
+        console.error("Erreur lors de la récupération des doctorants par département:", error);
+        res.status(500).json({ error: error.message });
+    }
 };
+
 //
   
   
   
 
-// Récupérer les utilisateurs par rôle
+// Récupérer le departement des enseignats 
 const { Doctorant, Administrateur, Enseignant } = require('../models');
 exports.getDepartments = async (req, res) => {
     try {
@@ -346,16 +350,24 @@ exports.getUsersByRole = async (req, res) => {
 // Partager un document
 exports.getDoctorantDepartments = async (req, res) => {
     try {
-        const departments = await InfosCycleDoctoral.findAll({
-            attributes: ['departement_doctorant'], 
-            group: ['departement_doctorant']
+        // Find distinct departments from InfosCycleDoctorals
+        const departments = await InfosCycleDoctorals.findAll({
+            attributes: [
+                [Sequelize.fn('DISTINCT', Sequelize.col('departement_doctorant')), 'departement_doctorant']
+            ],
+            raw: true // Return raw results, not Sequelize instances
         });
-        res.status(200).json(departments.map(dept => dept.structure_recherche_directeur));
+
+        // Extract the department names from the results
+        const departmentList = departments.map(dept => dept.departement_doctorant);
+
+        res.status(200).json(departmentList);
     } catch (error) {
         console.error('Erreur lors de la récupération des départements des doctorants:', error);
         res.status(500).json({ error: 'Erreur lors de la récupération des départements des doctorants' });
     }
 };
+
 
 
 

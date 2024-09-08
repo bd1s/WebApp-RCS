@@ -12,6 +12,7 @@ const adminController = {
             include: [
               {
                 model: Utilisateur,
+                as: 'utilisateur', // Utiliser l'alias correct défini dans le modèle Doctorant
                 attributes: ['prenom', 'nom'],
               },
               {
@@ -27,7 +28,7 @@ const adminController = {
       // Format the response
       const formattedRequests = doctorantRequests.map((request) => {
         const doctorant = request.Doctorant;
-        const utilisateur = doctorant.Utilisateur;
+        const utilisateur = doctorant.utilisateur; // Utiliser l'alias correct ici
         const infosCycleDoctorals = doctorant.InfosCycleDoctorals[0]; // Assuming there's always at least one entry
 
         return {
@@ -47,6 +48,7 @@ const adminController = {
       res.status(500).json({ error: 'An error occurred while fetching doctorant requests.' });
     }
   },
+
 
 
   // controllers/demandeController.js

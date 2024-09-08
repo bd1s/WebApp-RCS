@@ -8,6 +8,8 @@ const getDoctorantDetails = async (req, res) => {
       include: [
         {
           model: Utilisateur,
+          as: 'utilisateur',
+
           attributes: ['prenom', 'nom']
         },
         {
@@ -18,7 +20,7 @@ const getDoctorantDetails = async (req, res) => {
     });
 
     const formattedDetails = doctorantDetails.map(doctorant => {
-      const utilisateur = doctorant.Utilisateur;
+      const utilisateur = doctorant.utilisateur;
       const infosCycle = doctorant.InfosCycleDoctorals[0]; 
 
       return {
