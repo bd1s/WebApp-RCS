@@ -211,7 +211,7 @@ const DemandeTable = ({ doctorantId }) => {
   }, [doctorantId]);
 
   const handleEditClick = (demandeId) => {
-    navigate(`update-demande/${demandeId}`); // Rediriger vers la page de mise à jour
+    navigate(`/doctorDashboard/update-demande/${demandeId}`);
   };
 
   if (loading) return <p>Chargement...</p>;
@@ -221,9 +221,10 @@ const DemandeTable = ({ doctorantId }) => {
     <div className="container mt-5">
       <div className="d-flex justify-content-between align-items-center mb-3">
         <h2>Mes demandes</h2>
-        <button onClick={() => navigate('DemandeForm')} className="btn btn-primary">
-          Ajouter une demande
-        </button>
+        <button onClick={() => navigate('/doctorDashboard/DemandeForm')} className="btn btn-primary">
+  Ajouter une demande
+</button>
+
       </div>
       <table className="table table-striped">
         <thead>

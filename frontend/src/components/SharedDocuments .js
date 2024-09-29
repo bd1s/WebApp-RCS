@@ -496,11 +496,10 @@ const SharedDocuments = () => {
         );
     });
 
-const formatDate = (dateString) => {
-    const date = new Date(dateString);
-    return date.toLocaleDateString('fr-FR'); // Formatage en 'DD/MM/YYYY'
-};
-
+    const formatDate = (dateString) => {
+        const date = new Date(dateString);
+        return date.toLocaleDateString('fr-FR'); // Formatage en 'DD/MM/YYYY'
+    };
 
     const getWeekNumber = (date) => {
         const start = new Date(date.getFullYear(), 0, 1);
@@ -572,54 +571,56 @@ const formatDate = (dateString) => {
                 </button>
             </div>
 
-            {view === 'list' && (
-                <ul className="space-y-4">
-                    {filteredDocuments.map((doc) => (
-                        <li key={doc.id_document} className="p-4 border border-gray-200 rounded-md shadow-sm">
-                            <p className="text-lg font-semibold">{doc.titre}</p>
-                            <p className="text-gray-700">Partagé par: {doc.prenom} {doc.nom} ({doc.email})</p>
-                            <p className="text-gray-500">Date de partage: {formatDate(doc.createdAt)}</p>
-                            <button 
-                                onClick={() => downloadDocument(doc.id_document, doc.titre)} 
-                                className="mt-2 bg-blue-500 text-white p-2 rounded-md hover:bg-blue-600 transition"
-                            >
-                                Télécharger
-                            </button>
-                        </li>
-                    ))}
-                    {filteredDocuments.length === 0 && (
-                        <p className="text-center text-gray-500">Aucun document trouvé.</p>
-                    )}
-                </ul>
-            )}
+            {/* Scrolling container */}
+            <div className="max-h-96 overflow-y-auto">
+                {view === 'list' && (
+                    <ul className="space-y-4">
+                        {filteredDocuments.map((doc) => (
+                            <li key={doc.id_document} className="p-4 border border-gray-200 rounded-md shadow-sm">
+                                <p className="text-lg font-semibold">{doc.titre}</p>
+                                <p className="text-gray-700">Partagé par: {doc.prenom} {doc.nom} ({doc.email})</p>
+                                <p className="text-gray-500">Date de partage: {formatDate(doc.createdAt)}</p>
+                                <button 
+                                    onClick={() => downloadDocument(doc.id_document, doc.titre)} 
+                                    className="mt-2 bg-blue-500 text-white p-2 rounded-md hover:bg-blue-600 transition"
+                                >
+                                    Télécharger
+                                </button>
+                            </li>
+                        ))}
+                        {filteredDocuments.length === 0 && (
+                            <p className="text-center text-gray-500">Aucun document trouvé.</p>
+                        )}
+                    </ul>
+                )}
 
-            {view === 'timeline' && (
-                <>
-                    {Object.keys(documentsByWeek).map(week => (
-                        <div key={week} className="mb-4">
-                            <h3 className="text-lg font-semibold mb-2">{week}</h3>
-                            <ul className="space-y-2">
-                                {documentsByWeek[week].map(doc => (
-                                    <li key={doc.id_document} className="p-4 border border-gray-200 rounded-md shadow-sm">
-                                        <p className="text-lg font-semibold">{doc.titre}</p>
-                                        <p className="text-gray-700">Partagé par: {doc.prenom} {doc.nom} ({doc.email})</p>
-                                        <p className="text-gray-500">Date de partage: {formatDate(doc.createdAt)}</p>
-                                        <button 
-                                            onClick={() => downloadDocument(doc.id_document, doc.titre)} 
-                                            className="mt-2 bg-blue-500 text-white p-2 rounded-md hover:bg-blue-600 transition"
-                                        >
-                                            Télécharger
-                                        </button>
-                                    </li>
-                                ))}
-                            </ul>
-                        </div>
-                    ))}
-                </>
-            )}
+                {view === 'timeline' && (
+                    <>
+                        {Object.keys(documentsByWeek).map(week => (
+                            <div key={week} className="mb-4">
+                                <h3 className="text-lg font-semibold mb-2">{week}</h3>
+                                <ul className="space-y-2">
+                                    {documentsByWeek[week].map(doc => (
+                                        <li key={doc.id_document} className="p-4 border border-gray-200 rounded-md shadow-sm">
+                                            <p className="text-lg font-semibold">{doc.titre}</p>
+                                            <p className="text-gray-700">Partagé par: {doc.prenom} {doc.nom} ({doc.email})</p>
+                                            <p className="text-gray-500">Date de partage: {formatDate(doc.createdAt)}</p>
+                                            <button 
+                                                onClick={() => downloadDocument(doc.id_document, doc.titre)} 
+                                                className="mt-2 bg-blue-500 text-white p-2 rounded-md hover:bg-blue-600 transition"
+                                            >
+                                                Télécharger
+                                            </button>
+                                        </li>
+                                    ))}
+                                </ul>
+                            </div>
+                        ))}
+                    </>
+                )}
+            </div>
         </div>
     );
 };
 
 export default SharedDocuments;
-

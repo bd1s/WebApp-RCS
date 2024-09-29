@@ -72,12 +72,12 @@ router.get('/doctorant/:doctorantId', verifyToken, demandeController.getDemandes
 router.get('/:id_demande', verifyToken, demandeController.getDemandeById); 
 
 
+router.post('/email-academique',upload.single('document_necessaire'), verifyToken, demandeController.createDemande);
 
 router.post('/inscription', verifyToken, upload.single('fichier_demande'), demandeController.createDemande);
 router.post('/retrait-provisoire', verifyToken, upload.single('fichier_demande_retrait'), demandeController.createDemande);
 router.post('/retrait-definitif', verifyToken, upload.single('fichier_retrait_definitif'), demandeController.createDemande);
 router.post('/carte-etudiant', verifyToken, upload.single('fichier_carte_etudiant'), demandeController.createDemande);
-router.post('/email-academique', verifyToken, demandeController.createDemande);
 router.post('/reinscription-derogation', verifyToken, upload.single('fichier_demande_reinscription'), demandeController.createDemande);
 router.post('/changement-sujet-these', verifyToken, upload.single('fichier_demande_changement_sujet'), demandeController.createDemande);
 router.post('/changement-directeur-these', verifyToken, upload.single('fichier_demande_changement_directeur'), demandeController.createDemande);
@@ -86,17 +86,17 @@ router.post('/convention-stage', verifyToken, upload.single('fichier_demande_sta
 router.post('/cotutelle', verifyToken, upload.single('fichier_demande_cotutelle'), demandeController.createDemande);
 router.post('/changement-codirecteur-these', verifyToken, upload.single('fichier_demande_changement_codirecteur'), demandeController.createDemande);
 router.post('/imists', verifyToken, upload.single('fichiers_cv'), demandeController.createDemande);
-router.post('/tirage', verifyToken, upload.single('fichier_demande_tirage'), demandeController.createDemande);
+router.post('/tirage', verifyToken, upload.single('fichier_demande'), demandeController.createDemande);
 
 
 // Mise à jour des demandes (routes PUT)
-// router.put('/:id_demande', verifyToken, upload.single('file'), uploadFile, demandeController.updateDemande);
+router.put('/:id_demande', verifyToken, upload.single('file'),demandeController.updateDemande);
 
 router.put('/inscription/:id_demande', verifyToken, upload.single('file'), demandeController.updateDemande);
 router.put('/retrait-provisoire/:id_demande', verifyToken, upload.single('fichier_demande_retrait'), demandeController.updateDemande);
 router.put('/retrait-definitif/:id_demande', verifyToken, upload.single('fichier_retrait_definitif'), demandeController.updateDemande);
 router.put('/carte-etudiant/:id_demande', verifyToken, upload.single('fichier_carte_etudiant'), demandeController.updateDemande);
-router.put('/email-academique/:id_demande', verifyToken, demandeController.updateDemande);
+router.put('/email-academique/:id_demande', verifyToken,upload.single('document_necessaire'), demandeController.updateDemande);
 router.put('/reinscription-derogation/:id_demande', verifyToken, upload.single('fichier_demande_reinscription'), demandeController.updateDemande);
 router.put('/changement-sujet-these/:id_demande', verifyToken, upload.single('fichier_demande_changement_sujet'), demandeController.updateDemande);
 router.put('/changement-directeur-these/:id_demande', verifyToken, upload.single('fichier_demande_changement_directeur'), demandeController.updateDemande);

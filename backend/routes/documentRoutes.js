@@ -50,4 +50,6 @@ router.get('/getDoctorantDepartments',verifyToken, documentController.getDoctora
 // Route for retrieving doctorants by selected department
 router.get('/doctorantsByDepartment/:departement',verifyToken,documentController.getDoctorantsByDepartement);
 
+router.get('/usersByDepartments', verifyToken,documentController.getUsersByDepartments);
+
 module.exports = router;

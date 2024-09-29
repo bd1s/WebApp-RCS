@@ -20,6 +20,10 @@ module.exports = (sequelize, DataTypes) => {
       type: DataTypes.STRING,
       allowNull: true,
     },
+    document_necessaire: {
+      type: DataTypes.STRING,  
+      allowNull: true,        
+    },
   });
 
   DemandeEmailAcademiques.associate = (models) => {

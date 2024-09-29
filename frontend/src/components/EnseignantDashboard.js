@@ -40,11 +40,11 @@ const EnseignantDashboard = () => {
         <div>
         <Link to="SharedDocuments" className="flex flex-row gap-1 text-lg items-center text-white">
             <Notif fillColor="white" width={32} height={32} />
-            <p>Notifications</p>
+            <p>Documents</p>
           </Link>
           <Link to="UploadDocument" className="flex flex-row gap-1 text-lg items-center text-white">
             <ArticleIconCustom fillColor="white" width={26} height={26} />
-            <p>Documents</p>
+            <p>Boîte d'envoi</p>
           </Link>
         <Link to="DoctorantsEncadres" className="flex flex-row gap-1 text-lg items-center text-white">
             <Request fillColor="white" width={32} height={32} />
@@ -56,7 +56,7 @@ const EnseignantDashboard = () => {
             </div>
             <p>Calendar</p>
           </Link> 
-          <Link to="CalendarForAdmin" className="flex flex-row gap-1 text-lg items-center text-white">
+          <Link to="CalendarForEvent" className="flex flex-row gap-1 text-lg items-center text-white">
             <div className="p-[5px]">
               <Calendar fillColor="white" width={22} height={22} />
             </div>

@@ -506,7 +506,8 @@
 //   );
 // };
 
-// export default UpdateDemandeForm;        
+// export default UpdateDemandeForm;  
+      
 import React, { useState, useEffect } from 'react';
 import axios from '../api/axios'; // Utiliser l'instance Axios configurée
 import { useParams } from 'react-router-dom';
@@ -548,33 +549,37 @@ const UpdateDemandeForm = () => {
     e.preventDefault();
     const formDataToSend = new FormData();
 
+    // Ajouter le type de demande
+    formDataToSend.append('type_demande', demandeData.type_demande);
+
     // Ajouter toutes les données de demandeData sauf 'file'
     Object.keys(demandeData).forEach((key) => {
-      if (key !== 'file') {
-        formDataToSend.append(key, demandeData[key]);
-      }
+        if (key !== 'file') {
+            formDataToSend.append(key, demandeData[key]);
+        }
     });
 
     // Ajouter le fichier si présent
     if (file) {
-      formDataToSend.append('file', file);
+        formDataToSend.append('file', file);
     }
 
     // Ajouter des métadonnées supplémentaires si nécessaire
-    formDataToSend.append('date_soumission', new Date().toISOString().split('T')[0]);
+    formDataToSend.append('date_soumission', new Date().toISOString());
 
     try {
-      const response = await axios.put(`/demandes/inscription/${demandeId}`, formDataToSend, {
-        headers: {
-          'Content-Type': 'multipart/form-data',
-        },
-      });
-      setMessage(response.data.message);
+        const response = await axios.put(`/demandes/${demandeId}`, formDataToSend, {
+            headers: {
+                'Content-Type': 'multipart/form-data',
+            },
+        });
+        setMessage(response.data.message);
     } catch (error) {
-      console.error('Erreur lors de la mise à jour de la demande:', error);
-      setMessage('Erreur lors de la mise à jour de la demande.');
+        console.error('Erreur lors de la mise à jour de la demande:', error);
+        setMessage('Erreur lors de la mise à jour de la demande.');
     }
-  };
+};
+
 
   if (loading) return <p>Loading...</p>;
 
@@ -815,14 +820,25 @@ const UpdateDemandeForm = () => {
       onChange={handleChange}
       className="mt-1 block w-full px-3 py-2 border border-gray-300 rounded-md shadow-sm focus:outline-none focus:ring-indigo-500 focus:border-indigo-500 sm:text-sm"
     />
+
     <label className="block text-sm font-medium text-gray-700">Motif de la Demande</label>
     <input
       type="text"
-      name="motif_demande"
-      value={demandeData.motif_demande || ''}
+      name="motif"
+      value={demandeData.motif || ''}
       onChange={handleChange}
       className="mt-1 block w-full px-3 py-2 border border-gray-300 rounded-md shadow-sm focus:outline-none focus:ring-indigo-500 focus:border-indigo-500 sm:text-sm"
     />
+
+    <label className="block text-sm font-medium text-gray-700">Décision Prise</label>
+    <input
+      type="text"
+      name="decision_prise"
+      value={demandeData.decision_prise || ''}
+      onChange={handleChange}
+      className="mt-1 block w-full px-3 py-2 border border-gray-300 rounded-md shadow-sm focus:outline-none focus:ring-indigo-500 focus:border-indigo-500 sm:text-sm"
+    />
+
     <label className="block text-sm font-medium text-gray-700">Fichier de Réinscription/Dérogation</label>
     <input
       type="file"
@@ -832,6 +848,7 @@ const UpdateDemandeForm = () => {
     />
   </>
 )}
+
 
 {demandeData.type_demande === 'convention-stage' && (
   <>
@@ -846,11 +863,12 @@ const UpdateDemandeForm = () => {
 
     <label className="block text-sm font-medium text-gray-700">Période de Stage</label>
     <input
-      type="date"
+      type="text"
       name="periode_stage"
       value={demandeData.periode_stage || ''}
       onChange={handleChange}
       className="mt-1 block w-full px-3 py-2 border border-gray-300 rounded-md shadow-sm focus:outline-none focus:ring-indigo-500 focus:border-indigo-500 sm:text-sm"
+      placeholder="Ex: 01/06/2024 - 30/08/2024" // Exemple de format
     />
 
     <label className="block text-sm font-medium text-gray-700">Objectifs du Stage</label>
@@ -871,6 +889,7 @@ const UpdateDemandeForm = () => {
     />
   </>
 )}
+
 
 {demandeData.type_demande === 'cotutelle' && (
   <>
@@ -1009,11 +1028,20 @@ const UpdateDemandeForm = () => {
       className="mt-1 block w-full px-3 py-2 border border-gray-300 rounded-md shadow-sm focus:outline-none focus:ring-indigo-500 focus:border-indigo-500 sm:text-sm"
     />
 
-    <label className="block text-sm font-medium text-gray-700">Nombre de Copies</label>
+    <label className="block text-sm font-medium text-gray-700">Nombre d'Exemplaires</label>
     <input
       type="number"
-      name="nombre_copies"
-      value={demandeData.nombre_copies || ''}
+      name="nombre_exemplaires" // Correction ici
+      value={demandeData.nombre_exemplaires || ''} // Correction ici
+      onChange={handleChange}
+      className="mt-1 block w-full px-3 py-2 border border-gray-300 rounded-md shadow-sm focus:outline-none focus:ring-indigo-500 focus:border-indigo-500 sm:text-sm"
+    />
+
+    <label className="block text-sm font-medium text-gray-700">Date de Soutenance</label>
+    <input
+      type="date" // Utilisation du type date pour le champ date
+      name="date_soutenance"
+      value={demandeData.date_soutenance || ''}
       onChange={handleChange}
       className="mt-1 block w-full px-3 py-2 border border-gray-300 rounded-md shadow-sm focus:outline-none focus:ring-indigo-500 focus:border-indigo-500 sm:text-sm"
     />
@@ -1027,6 +1055,7 @@ const UpdateDemandeForm = () => {
     />
   </>
 )}
+
 
 <button
   type="submit"

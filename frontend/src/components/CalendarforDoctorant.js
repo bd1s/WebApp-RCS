@@ -3,11 +3,14 @@ import { Calendar, momentLocalizer } from 'react-big-calendar';
 import 'react-big-calendar/lib/css/react-big-calendar.css';
 import axios from 'axios'; 
 import moment from 'moment';
+import { Modal, ModalOverlay, ModalContent, ModalHeader, ModalBody, ModalCloseButton, Box } from "@chakra-ui/react";
 
 const localizer = momentLocalizer(moment);
 
 const CalendarForDoctorant = () => {
   const [events, setEvents] = useState([]);
+  const [selectedEvent, setSelectedEvent] = useState(null);
+  const [isModalOpen, setIsModalOpen] = useState(false);
 
   useEffect(() => {
     fetchEvents();
@@ -15,10 +18,9 @@ const CalendarForDoctorant = () => {
 
   const fetchEvents = async () => {
     try {
-      // Assurez-vous que le token est disponible et envoyé avec la requête
       const response = await axios.get('http://localhost:3001/api/reunions/doctorant/meetings', {
         headers: {
-          'Authorization': `Bearer ${localStorage.getItem('token')}` // ou autre méthode pour obtenir le token
+          'Authorization': `Bearer ${localStorage.getItem('token')}`
         }
       });
 
@@ -42,12 +44,13 @@ const CalendarForDoctorant = () => {
   };
 
   const handleSelectEvent = (event) => {
-    alert(
-      `Titre: ${event.title}\n` +
-      `Description: ${event.description}\n` +
-      `Début: ${moment(event.start).format('LLL')}\n` +
-      `Fin: ${moment(event.end).format('LLL')}`
-    );
+    setSelectedEvent(event);
+    setIsModalOpen(true);
+  };
+
+  const closeModal = () => {
+    setIsModalOpen(false);
+    setSelectedEvent(null);
   };
 
   const eventStyleGetter = (event) => {
@@ -76,7 +79,7 @@ const CalendarForDoctorant = () => {
   };
 
   return (
-    <div>
+    <Box>
       <Calendar
         localizer={localizer}
         events={events}
@@ -90,7 +93,23 @@ const CalendarForDoctorant = () => {
           event: EventWrapper,
         }}
       />
-    </div>
+
+      {/* Modal pour afficher les détails de la réunion */}
+      {selectedEvent && (
+        <Modal isOpen={isModalOpen} onClose={closeModal}>
+          <ModalOverlay />
+          <ModalContent>
+            <ModalHeader>{selectedEvent.title}</ModalHeader>
+            <ModalCloseButton />
+            <ModalBody>
+              <p><strong>Description:</strong> {selectedEvent.description}</p>
+              <p><strong>Date de début:</strong> {moment(selectedEvent.start).format('LLL')}</p>
+              <p><strong>Date de fin:</strong> {moment(selectedEvent.end).format('LLL')}</p>
+            </ModalBody>
+          </ModalContent>
+        </Modal>
+      )}
+    </Box>
   );
 };
 

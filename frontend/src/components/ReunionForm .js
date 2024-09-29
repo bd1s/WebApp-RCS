@@ -1,178 +1,5 @@
 
 
-// import React, { useMemo } from 'react';
-// import { Box, Button, Flex, FormControl, FormLabel, Input, Text, Textarea } from "@chakra-ui/react";
-// import { Field, Form, Formik } from "formik";
-// import DatePicker from "react-datepicker";
-// import "react-datepicker/dist/react-datepicker.css";
-// import moment from 'moment';
-// import CustomTimeInput from './CustomTimeInput'; 
-
-// import { useCreateReunion, useUpdateReunion, useDeleteReunion } from "./Requests";
-
-// // const CustomTimeInput = ({ value, onChange }) => (
-// //   <Input
-// //     value={value || ""}
-// //     onChange={(e) => onChange(e.target.value)}
-// //     width="100%"
-// //   />
-// // );
-
-// const ReunionForm = ({ reunion, onClose, isCreating }) => {
-//   const label = isCreating ? "Create" : "Update";
-
-//   // Initialisation des valeurs
-//   const initialValues = useMemo(() => ({
-//     id_reunion: reunion?.id_reunion || "",
-//     titre: reunion?.titre || "",
-//     description: reunion?.description || "",
-//     date: reunion?.date || "",
-//     heure_debut: reunion?.heure_debut || "",
-//     heure_fin: reunion?.heure_fin || "",
-//     doctorants: reunion?.doctorants || []
-//   }), [reunion]);
-
-//   const { mutateAsync: createReunion } = useCreateReunion();
-//   const { mutateAsync: updateReunion } = useUpdateReunion();
-//   const { mutateAsync: deleteReunion } = useDeleteReunion();
-
-//   return (
-//     <Box boxShadow={"2xl"} padding="10" rounded="xl" bg="white" width="100%">
-//       <Formik
-//         initialValues={initialValues}
-//         enableReinitialize
-//         onSubmit={async (values) => {
-//           const formattedValues = {
-//             ...values,
-//             date: moment(values.date).format('YYYY-MM-DD'),
-//             heure_debut: moment(values.heure_debut, 'HH:mm').format('HH:mm'),
-//             heure_fin: moment(values.heure_fin, 'HH:mm').format('HH:mm'),
-//           };
-//           if (isCreating) {
-//             await createReunion(formattedValues);
-//           } else {
-//             if (!values.id_reunion) {
-//               console.error("Missing id_reunion for update.");
-//               return;
-//             }
-//             await updateReunion(formattedValues);
-//           }
-//           onClose(); // Fermer le formulaire après la soumission
-//         }}
-//       >
-//         {({ values, setFieldValue, handleSubmit }) => (
-//           <Form>
-//             <Flex justifyContent={"space-between"} alignItems="center">
-//               <Box>
-//                 <Text fontSize="4xl" mb={4}>{label} a meeting</Text>
-//               </Box>
-//               {!isCreating && reunion?.id_reunion && (
-//                 <Box>
-//                   <Button
-//                     onClick={async () => {
-//                       await deleteReunion(reunion.id_reunion);
-//                       onClose(); // Fermer le formulaire après la suppression
-//                     }}
-//                     colorScheme="red"
-//                   >
-//                     Delete
-//                   </Button>
-//                 </Box>
-//               )}
-//             </Flex>
-
-//             <Field name="titre">
-//               {({ field }) => (
-//                 <FormControl>
-//                   <FormLabel>Title</FormLabel>
-//                   <Input {...field} value={field.value || ""} />
-//                 </FormControl>
-//               )}
-//             </Field>
-//             <Field name="description">
-//               {({ field }) => (
-//                 <FormControl>
-//                   <FormLabel>Description</FormLabel>
-//                   <Textarea {...field} rows={4} value={field.value || ""} />
-//                 </FormControl>
-//               )}
-//             </Field>
-//             <Field name="date">
-//               {({ field }) => (
-//                 <FormControl>
-//                   <FormLabel>Date</FormLabel>
-//                   <DatePicker
-//                     onChange={(date) => setFieldValue("date", moment(date).format('YYYY-MM-DD'))}
-//                     selected={values.date ? moment(values.date).toDate() : null}
-//                     dateFormat="yyyy-MM-dd"
-//                   />
-//                 </FormControl>
-//               )}
-//             </Field>
-//             <Flex gap={4} mt={4}>
-//               <Flex flexBasis={"50%"}>
-//                 <FormControl>
-//                   <FormLabel>Start Time</FormLabel>
-//                   <DatePicker
-//                     onChange={(date) => setFieldValue("heure_debut", moment(date).format('HH:mm'))}
-//                     selected={values.heure_debut ? moment(`1900-01-01T${values.heure_debut}`).toDate() : null}
-//                     showTimeSelect
-//                     timeIntervals={15}
-//                     dateFormat="HH:mm"
-//                     customInput={<CustomTimeInput />}
-//                   />
-//                 </FormControl>
-//               </Flex>
-//               <Flex flexBasis={"50%"}>
-//                 <FormControl>
-//                   <FormLabel>End Time</FormLabel>
-//                   <DatePicker
-//                     onChange={(date) => setFieldValue("heure_fin", moment(date).format('HH:mm'))}
-//                     selected={values.heure_fin ? moment(`1900-01-01T${values.heure_fin}`).toDate() : null}
-//                     showTimeSelect
-//                     timeIntervals={15}
-//                     dateFormat="HH:mm"
-//                     customInput={<CustomTimeInput />}
-//                   />
-//                 </FormControl>
-//               </Flex>
-//             </Flex>
-
-//             <Field name="doctorants">
-//               {({ field }) => (
-//                 <FormControl>
-//                   <FormLabel>Associated Doctorants</FormLabel>
-//                   <Input
-//                     {...field}
-//                     value={field.value.join(', ') || ""}
-//                     placeholder="Enter associated doctorants IDs separated by commas"
-//                     onChange={(e) => setFieldValue("doctorants", e.target.value.split(',').map(id => id.trim()))}
-//                   />
-//                 </FormControl>
-//               )}
-//             </Field>
-
-//             <Button mt={4} colorScheme={"whatsapp"} onClick={() => handleSubmit()}>
-//               {label}
-//             </Button>
-//             <Button mt={4} ml={4} colorScheme={"gray"} onClick={onClose}>
-//               Cancel
-//             </Button>
-//           </Form>
-//         )}
-//       </Formik>
-//     </Box>
-//   );
-// };
-
-// export default ReunionForm;
-
-
-
-
-
-
-
 // import React, { useEffect, useMemo, useState } from 'react';
 // import { Box, Button, Flex, FormControl, FormLabel, Input, Text, Textarea, Select } from "@chakra-ui/react";
 // import { Field, Form, Formik } from "formik";
@@ -197,15 +24,14 @@
 //     date: reunion?.date || "",
 //     heure_debut: reunion?.heure_debut || "",
 //     heure_fin: reunion?.heure_fin || "",
-// doctorants: reunion?.doctorants || []
+//     doctorants: reunion?.doctorants || []
 //   }), [reunion]);
 
 //   useEffect(() => {
-//     // Fetch departments when the component is loaded
 //     const fetchDepartments = async () => {
 //       try {
 //         const response = await axios.get('http://localhost:3001/api/reunions/departements');
-//         setDepartments(response.data); // Set departments as an array of strings
+//         setDepartments(response.data);
 //       } catch (error) {
 //         console.error("Error fetching departments:", error);
 //       }
@@ -216,22 +42,18 @@
 
 //   useEffect(() => {
 //     if (selectedDepartment) {
-//       // Fetch doctorants when a department is selected
 //       const fetchDoctorants = async () => {
 //         try {
 //           const response = await axios.get(`http://localhost:3001/api/reunions/doctorants/departement/${selectedDepartment}`);
-//           console.log("Doctorants fetched:", response.data); // Ajoutez ce log pour vérifier
 //           setDoctorants(response.data);
 //         } catch (error) {
 //           console.error("Error fetching doctorants:", error);
 //         }
 //       };
-      
   
 //       fetchDoctorants();
 //     }
 //   }, [selectedDepartment]);
-  
 
 //   const { mutateAsync: createReunion } = useCreateReunion();
 //   const { mutateAsync: updateReunion } = useUpdateReunion();
@@ -258,7 +80,7 @@
 //             }
 //             await updateReunion(formattedValues);
 //           }
-//           onClose(); // Fermer le formulaire après la soumission
+//           onClose();
 //         }}
 //       >
 //         {({ values, setFieldValue, handleSubmit }) => (
@@ -272,7 +94,7 @@
 //                   <Button
 //                     onClick={async () => {
 //                       await deleteReunion(reunion.id_reunion);
-//                       onClose(); // Fermer le formulaire après la suppression
+//                       onClose();
 //                     }}
 //                     colorScheme="red"
 //                   >
@@ -352,8 +174,8 @@
 //                     }}
 //                   >
 //                     {departments.map((dept, index) => (
-//   <option key={index} value={dept}>{dept}</option>
-// ))}
+//                       <option key={index} value={dept}>{dept}</option>
+//                     ))}
 //                   </Select>
 //                 </FormControl>
 //               )}
@@ -363,22 +185,37 @@
 //   {({ field, form }) => (
 //     <FormControl>
 //       <FormLabel>Select Doctorants</FormLabel>
-//       <Select
-//         {...field}
-//         placeholder="Select doctorants"
-//         onChange={(e) => {
-//           const selectedValues = Array.from(e.target.selectedOptions, option => option.value);
-//           form.setFieldValue("doctorants", selectedValues);
-//         }}
-//         multiple
-//       >
+//       <Flex direction="column">
 //         {doctorants.map((doc) => (
-//           <option key={doc.id} value={doc.id}>{doc.name}</option>
+//           <Box key={doc.id}>
+//             <input
+//               type="checkbox"
+//               id={`doctorant-${doc.id}`}
+//               name={field.name}
+//               value={doc.id}
+//               checked={field.value.includes(doc.id)}
+//               onChange={(e) => {
+//                 const selectedDoctorants = [...field.value];
+//                 if (e.target.checked) {
+//                   selectedDoctorants.push(doc.id);
+//                 } else {
+//                   const index = selectedDoctorants.indexOf(doc.id);
+//                   if (index > -1) {
+//                     selectedDoctorants.splice(index, 1);
+//                   }
+//                 }
+//                 form.setFieldValue(field.name, selectedDoctorants);
+//               }}
+//             />
+//             <label htmlFor={`doctorant-${doc.id}`}>{`${doc.nom} ${doc.prenom}`}</label>
+//           </Box>
 //         ))}
-//       </Select>
+//       </Flex>
 //     </FormControl>
 //   )}
 // </Field>
+
+
 
 
 //             <Button mt={4} colorScheme={"whatsapp"} onClick={() => handleSubmit()}>
@@ -397,9 +234,8 @@
 // export default ReunionForm;
 
 
-
 import React, { useEffect, useMemo, useState } from 'react';
-import { Box, Button, Flex, FormControl, FormLabel, Input, Text, Textarea, Select } from "@chakra-ui/react";
+import { Box, Button, Flex, FormControl, FormLabel, Input, Text, Textarea, Select, Checkbox, Collapse } from "@chakra-ui/react";
 import { Field, Form, Formik } from "formik";
 import DatePicker from "react-datepicker";
 import "react-datepicker/dist/react-datepicker.css";
@@ -412,6 +248,8 @@ const ReunionForm = ({ reunion, onClose, isCreating }) => {
   const [departments, setDepartments] = useState([]);
   const [doctorants, setDoctorants] = useState([]);
   const [selectedDepartment, setSelectedDepartment] = useState("");
+  const [selectAll, setSelectAll] = useState(false);
+  const [isDropdownOpen, setDropdownOpen] = useState(false); // State for dropdown visibility
 
   const label = isCreating ? "Create" : "Update";
 
@@ -456,6 +294,20 @@ const ReunionForm = ({ reunion, onClose, isCreating }) => {
   const { mutateAsync: createReunion } = useCreateReunion();
   const { mutateAsync: updateReunion } = useUpdateReunion();
   const { mutateAsync: deleteReunion } = useDeleteReunion();
+
+  const handleSelectChange = (form, field, docId, checked) => {
+    const selectedDoctorants = [...field.value];
+    if (checked) {
+      selectedDoctorants.push(docId);
+    } else {
+      const index = selectedDoctorants.indexOf(docId);
+      if (index > -1) {
+        selectedDoctorants.splice(index, 1);
+      }
+    }
+    form.setFieldValue(field.name, selectedDoctorants);
+    setSelectAll(selectedDoctorants.length === doctorants.length);
+  };
 
   return (
     <Box boxShadow={"2xl"} padding="10" rounded="xl" bg="white" width="100%">
@@ -583,31 +435,56 @@ const ReunionForm = ({ reunion, onClose, isCreating }) => {
   {({ field, form }) => (
     <FormControl>
       <FormLabel>Select Doctorants</FormLabel>
-      <Flex direction="column">
-        {doctorants.map((doc) => (
-          <Box key={doc.id}>
-            <input
-              type="checkbox"
-              id={`doctorant-${doc.id}`}
-              name={field.name}
-              value={doc.id}
-              checked={field.value.includes(doc.id)}
-              onChange={(e) => {
-                const selectedDoctorants = [...field.value];
-                if (e.target.checked) {
-                  selectedDoctorants.push(doc.id);
-                } else {
-                  const index = selectedDoctorants.indexOf(doc.id);
-                  if (index > -1) {
-                    selectedDoctorants.splice(index, 1);
-                  }
-                }
-                form.setFieldValue(field.name, selectedDoctorants);
+      <Flex direction="column" mt={2}>
+        {/* Bouton pour afficher/masquer le dropdown */}
+        <Button
+          onClick={() => setDropdownOpen(!isDropdownOpen)}
+          colorScheme="blue"
+        >
+          {isDropdownOpen ? "Hide Doctorants" : "Show Doctorants"}
+        </Button>
+
+        {/* Dropdown avec les doctorants */}
+        <Collapse in={isDropdownOpen}>
+          <Box 
+            overflowY="auto"      
+            maxH="80px"          
+            borderWidth="1px"     
+            borderRadius="md"     
+            p={2}                
+            mt={2}                
+          >
+            {/* Checkbox pour tout sélectionner */}
+            <Checkbox
+              isChecked={selectAll}
+              onChange={(event) => {
+                const checked = event.target.checked;
+                setSelectAll(checked);
+                const allDoctorantIds = doctorants.map(doc => doc.id);
+                form.setFieldValue(field.name, checked ? allDoctorantIds : []); 
               }}
-            />
-            <label htmlFor={`doctorant-${doc.id}`}>{`${doc.nom} ${doc.prenom}`}</label>
+            >
+              Select All
+            </Checkbox>
+            
+            {/* Liste des doctorants en cases à cocher */}
+            <Box mt={2} display="flex" flexDirection="column"> {/* Ajout d'un display flex direction column */}
+              {doctorants.map((doc) => (
+                <Checkbox
+                  key={doc.id}
+                  id={`doctorant-${doc.id}`}
+                  name={field.name}
+                  value={doc.id}
+                  isChecked={field.value.includes(doc.id)} 
+                  onChange={(e) => handleSelectChange(form, field, doc.id, e.target.checked)} 
+                  width="100%" 
+                >
+                  {`${doc.nom} ${doc.prenom}`}  
+                </Checkbox>
+              ))}
+            </Box>
           </Box>
-        ))}
+        </Collapse>
       </Flex>
     </FormControl>
   )}
@@ -615,12 +492,8 @@ const ReunionForm = ({ reunion, onClose, isCreating }) => {
 
 
 
-
-            <Button mt={4} colorScheme={"whatsapp"} onClick={() => handleSubmit()}>
+            <Button colorScheme="blue" type="submit" onClick={handleSubmit}>
               {label}
-            </Button>
-            <Button mt={4} ml={4} colorScheme={"gray"} onClick={onClose}>
-              Cancel
             </Button>
           </Form>
         )}

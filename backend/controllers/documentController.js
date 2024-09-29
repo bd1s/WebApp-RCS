@@ -473,3 +473,32 @@ exports.downloadDocument = async (req, res) => {
         res.status(500).json({ error: 'Erreur lors du téléchargement du document' });
     }
 };
+
+
+exports.getUsersByDepartments = async (req, res) => {
+    try {
+        const { role, departements } = req.query;
+
+        // Convertir departements en tableau si nécessaire
+        const departementArray = Array.isArray(departements) ? departements : [departements];
+        
+        let users = [];
+
+        // Si c'est un enseignant ou un doctorant, récupérer les utilisateurs pour les départements sélectionnés
+        if (role === 'enseignant' || role === 'doctorant') {
+            users = await Utilisateur.findAll({  // Changer User par Utilisateur
+                where: {
+                    role,
+                    departement: {
+                        [Op.in]: departementArray
+                    }
+                }
+            });
+        }
+
+        res.status(200).json(users);
+    } catch (error) {
+        console.error('Erreur lors de la récupération des utilisateurs:', error);
+        res.status(500).json({ message: 'Erreur interne du serveur' });
+    }
+};

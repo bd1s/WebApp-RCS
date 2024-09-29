@@ -41,11 +41,11 @@ const AdminDashboard = () => {
         <div>
           <Link to="SharedDocuments" className="flex flex-row gap-1 text-lg items-center text-white">
             <Notif fillColor="white" width={32} height={32} />
-            <p>Notifications</p>
+            <p>Documents</p>
           </Link>
           <Link to="UploadDocument" className="flex flex-row gap-1 text-lg items-center text-white">
             <ArticleIconCustom fillColor="white" width={26} height={26} />
-            <p>Documents</p>
+            <p>Boîte d'envoi</p>
           </Link>
           <Link to="dashboardDataForAdmin" className="flex flex-row gap-1 text-lg items-center text-white">
             <Case fillColor="white" width={32} height={32} />

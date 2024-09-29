@@ -26,6 +26,7 @@ const DemandeForm = () => {
       fichier_carte_etudiant: null,
       identifiant_souhaite: '',
       motif_demande: '',
+      document_necessaire: null,
       entreprise_accueil: '',
       periode_stage: '',
       objectifs_stage: '',
@@ -115,7 +116,7 @@ const DemandeForm = () => {
 
       for (const key in demandeData) {
         if (demandeData[key] !== null && demandeData[key] !== undefined) {
-          if (key === 'fichier_demande' || key === 'fichier_demande_retrait' || key === 'fichier_retrait_definitif' || key === 'fichier_carte_etudiant' || key === 'fichier_demande_changement_sujet'|| key === 'fichier_demande_changement_directeur'|| key === 'fichier_demande_reinscription' || key === 'fichier_demande_stage'|| key === 'fichier_demande_cotutelle'|| key === 'fichier_demande_changement_codirecteur'|| key === 'fichiers_cv'|| key === 'fichier_demande_tirage'|| key === 'Fichier_demande_tirage' ) {
+          if (key === 'fichier_demande' || key === 'fichier_demande_retrait' || key === 'fichier_retrait_definitif' || key === 'fichier_carte_etudiant' || key === 'document_necessaire'|| key === 'fichier_demande_changement_sujet'|| key === 'fichier_demande_changement_directeur'|| key === 'fichier_demande_reinscription' || key === 'fichier_demande_stage'|| key === 'fichier_demande_cotutelle'|| key === 'fichier_demande_changement_codirecteur'|| key === 'fichiers_cv'|| key === 'fichier_demande_tirage'|| key === 'Fichier_demande_tirage' ) {
             formDataToSend.append(key, demandeData[key]);
             console.log('FormData:', formData);
 
@@ -311,6 +312,10 @@ const DemandeForm = () => {
             <label className="block text-gray-700">Motif de la Demande</label>
             <textarea name="motif_demande" value={formData.demandeData.motif_demande} onChange={handleNestedChange} className="input-field"></textarea>
           </div>
+          <div className="mb-4">
+      <label className="block text-gray-700">Fichier de Demande (PDF)</label>
+      <input type="file" name="document_necessaire" accept=".pdf" onChange={handleFileChange} className="input-field" />
+    </div>
         </>
       )}
       {formData.type_demande === 'reinscription-derogation' && (
@@ -329,7 +334,7 @@ const DemandeForm = () => {
     </div>
     <div className="mb-4">
       <label className="block text-gray-700">Fichier de Demande (PDF)</label>
-      <input type="file" name="fichier_demande" accept=".pdf" onChange={handleFileChange} className="input-field" />
+      <input type="file" name="fichier_demande_reinscription" accept=".pdf" onChange={handleFileChange} className="input-field" />
     </div>
   </>
 )} 
@@ -349,7 +354,7 @@ const DemandeForm = () => {
     </div>
     <div className="mb-4">
       <label className="block text-gray-700">Fichier de Demande (PDF)</label>
-      <input type="file" name="fichier_demande" accept=".pdf" onChange={handleFileChange} className="input-field" />
+      <input type="file" name="fichier_demande_changement_sujet" accept=".pdf" onChange={handleFileChange} className="input-field" />
     </div>
   </>
 )}
